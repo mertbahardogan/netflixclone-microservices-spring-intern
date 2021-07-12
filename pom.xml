@@ -5,8 +5,10 @@
 	<modules>
 		<module>film-service</module>
 		<module>common</module>
-		<module>user-service</module>
-	</modules>
+		<module>film</module>
+		<module>user</module>
+        <module>docker-compose</module>
+    </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -31,6 +33,7 @@
 		<spring-kafka.version>2.7.3</spring-kafka.version>
 		<postgresql.version>42.2.23</postgresql.version>
 		<spring-boot-starter-data-jpa.version>2.5.2</spring-boot-starter-data-jpa.version>
+		<common.version>0.0.1-SNAPSHOT</common.version>
 	</properties>
 <dependencyManagement>
 	<dependencies>
@@ -86,7 +89,11 @@
 			<artifactId>postgresql</artifactId>
 			<version>${postgresql.version}</version>
 		</dependency>
-
+		<dependency>
+			<groupId>com.microservices-netflix</groupId>
+			<artifactId>common</artifactId>
+			<version>${common.version}</version>
+		</dependency>
 	</dependencies>
 </dependencyManagement>
 
