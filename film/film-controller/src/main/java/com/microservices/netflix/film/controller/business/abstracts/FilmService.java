@@ -1,6 +1,5 @@
 package com.microservices.netflix.film.controller.business.abstracts;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.microservices.netflix.common.entities.Film;
 import org.springframework.stereotype.Service;
 

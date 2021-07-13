@@ -7,9 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FilmProcessDao extends JpaRepository<Film,Long> {
 
-    void add(Film film);
 
-    //void update(Film film,Long id);
-
-   // void deleteById(Long id);
 }

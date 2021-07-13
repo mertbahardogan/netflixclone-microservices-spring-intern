@@ -50,7 +50,7 @@ public class FilmManager implements FilmService {
     public void add(Film film) throws IOException {
 
         ObjectMapper objectMapper = new ObjectMapper();
-        ProcessMessage<Object> process = new ProcessMessage<>(
+        ProcessMessage<Film> process = new ProcessMessage<>(
                 ProcessType.ADD,
                 film
         );
@@ -64,7 +64,6 @@ public class FilmManager implements FilmService {
             @Override
             public void onFailure(Throwable ex) {
                 logger.info("Unable to send message=[ {} ] due to : {}", pm, ex.getMessage());
-
             }
 
             @Override
