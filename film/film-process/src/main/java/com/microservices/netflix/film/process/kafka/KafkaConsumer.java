@@ -36,5 +36,14 @@ public class KafkaConsumer {
             this.filmProcessService.add(emp);
             System.out.println("ADD'E GİTMEK ÜZRE HAZIR.");
         }
+        else if (processMessage.getProcessType() == ProcessType.UPDATE){
+            System.out.println("UPDATE'E GİTMEK ÜZRE HAZIR.");
+        }
+        else if(processMessage.getProcessType() == ProcessType.DELETE){
+            System.out.println("DELETE'E GİTMEK ÜZRE HAZIR.");
+        }
+        else{
+            System.out.println("ERROR!");
+        }
     }
 }
