@@ -5,6 +5,7 @@ import com.microservices.netflix.common.entities.Film;
 import org.springframework.stereotype.Service;
 
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,5 +15,5 @@ public interface FilmService {
 
     Optional<Film> findById(Long id);
 
-    void add(Film film) throws JsonProcessingException;
+    void add(Film film) throws IOException;
 }

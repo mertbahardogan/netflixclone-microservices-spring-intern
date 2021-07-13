@@ -1,6 +1,5 @@
 package com.microservices.netflix.film.controller.business.concretes;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.netflix.common.entities.Film;
 
@@ -18,19 +17,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class FilmManager implements FilmService {
     private static final Logger logger = LoggerFactory.getLogger(FilmManager.class);
-    private final KafkaTemplate<String, ProcessMessage> kafkaTemplate;
+    private final KafkaTemplate<String, String> kafkaTemplate;
     private final String TOPIC = "kafkaTopic";
 
     private final FilmDao filmDao;
 
     @Autowired
-    public FilmManager(KafkaTemplate<String, ProcessMessage> kafkaTemplate, FilmDao filmDao) {
+    public FilmManager(KafkaTemplate<String, String> kafkaTemplate, FilmDao filmDao) {
         this.kafkaTemplate = kafkaTemplate;
         this.filmDao = filmDao;
     }
@@ -47,18 +47,18 @@ public class FilmManager implements FilmService {
 
 
     @Override
-    public void add(Film film) throws JsonProcessingException {
+    public void add(Film film) throws IOException {
+
         ObjectMapper objectMapper = new ObjectMapper();
-        //Object filmJson=objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(film);
-        Object filmJson = objectMapper.writeValueAsString(film);
-        ProcessMessage<String> pm = new ProcessMessage<>(
+        ProcessMessage<Object> process = new ProcessMessage<>(
                 ProcessType.ADD,
-                filmJson.toString()
+                film
         );
 
-        logger.info(String.format("$$$$ => Producing message: %s", film.getName()));
-        logger.info(filmJson.toString());
-        ListenableFuture<SendResult<String, ProcessMessage>> future = this.kafkaTemplate.send(TOPIC, pm);
+        var pm = objectMapper.writeValueAsString(process);
+        logger.info(String.format("$$$$ => Producing message: %s", pm));
+
+        ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(TOPIC, pm);
         future.addCallback(new ListenableFutureCallback<>() {
 
             @Override
@@ -68,7 +68,7 @@ public class FilmManager implements FilmService {
             }
 
             @Override
-            public void onSuccess(SendResult<String, ProcessMessage> result) {
+            public void onSuccess(SendResult<String, String> result) {
                 logger.info("Sent message=[ {} ] with offset=[ {} ]", pm, result.getRecordMetadata().offset());
             }
         });

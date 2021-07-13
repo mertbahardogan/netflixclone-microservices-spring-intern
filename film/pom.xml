@@ -11,7 +11,6 @@
 
     <artifactId>film</artifactId>
     <packaging>pom</packaging>
-
     <modules>
         <module>film-controller</module>
         <module>film-process</module>

@@ -3,11 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<modules>
-		<module>film-service</module>
 		<module>common</module>
 		<module>film</module>
 		<module>user</module>
-        <module>docker-compose</module>
     </modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -33,8 +31,8 @@
 		<spring-kafka.version>2.7.3</spring-kafka.version>
 		<postgresql.version>42.2.23</postgresql.version>
 		<spring-boot-starter-data-jpa.version>2.5.2</spring-boot-starter-data-jpa.version>
-		<common.version>0.0.1-SNAPSHOT</common.version>
 	</properties>
+
 <dependencyManagement>
 	<dependencies>
 		<dependency>
@@ -75,15 +73,11 @@
 			<artifactId>spring-kafka</artifactId>
 			<version>${spring-kafka.version}</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 			<version>${spring-boot-starter-data-jpa.version}</version>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -92,7 +86,7 @@
 		<dependency>
 			<groupId>com.microservices-netflix</groupId>
 			<artifactId>common</artifactId>
-			<version>${common.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 	</dependencies>
 </dependencyManagement>
