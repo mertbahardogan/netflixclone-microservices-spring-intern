@@ -27,4 +27,14 @@ public class FilmProcessManager implements FilmProcessService {
         System.out.println("ADD METHODU CALISTI!!!!!");
 //        this.processDao.save(film);
     }
+
+    @Override
+    public void update(Film film, Long id) {
+
+    }
+
+    @Override
+    public void delete(Long id) {
+
+    }
 }
