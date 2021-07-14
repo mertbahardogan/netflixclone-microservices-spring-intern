@@ -1,16 +1,9 @@
 package com.microservices.netflix.film.process.business.concretes;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.netflix.common.entities.Film;
-import com.microservices.netflix.common.messages.ProcessMessage;
-import com.microservices.netflix.common.messages.ProcessType;
 import com.microservices.netflix.film.process.business.abstracts.FilmProcessService;
 import com.microservices.netflix.film.process.dataAccess.FilmProcessDao;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,17 +17,28 @@ public class FilmProcessManager implements FilmProcessService {
 
     @Override
     public void add(Film film) {
-        System.out.println("ADD METHODU CALISTI!!!!!");
-//        this.processDao.save(film);
+        this.processDao.save(film);
     }
 
     @Override
-    public void update(Film film, Long id) {
-
+    public void update(Long id, Film film) {
+        Film value = this.processDao.findById(id).get();
+        value.setName(film.getName());
+        value.setSummary(film.getSummary());
+        value.setCoverPhoto(film.getCoverPhoto());
+        value.setSpeakLanguage(film.getSpeakLanguage());
+        value.setTime(film.getTime());
+        value.setCategory(film.getCategory());
+        value.setCreatedBy(film.getCreatedBy());
+        value.setEditedBy(film.getEditedBy());
+        value.setCreated(film.getCreated());
+        value.setEdited(film.getEdited());
+        value.setDeleted(film.getDeleted());
+        this.processDao.save(value);
     }
 
     @Override
-    public void delete(Long id) {
-
+    public void deleteById(Long id) {
+        this.processDao.deleteById(id);
     }
 }

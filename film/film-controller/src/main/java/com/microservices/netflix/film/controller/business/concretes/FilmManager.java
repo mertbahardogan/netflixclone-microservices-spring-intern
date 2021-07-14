@@ -1,5 +1,6 @@
 package com.microservices.netflix.film.controller.business.concretes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.netflix.common.entities.Film;
 
@@ -25,7 +26,7 @@ import java.util.Optional;
 public class FilmManager implements FilmService {
     private static final Logger logger = LoggerFactory.getLogger(FilmManager.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final String TOPIC = "kafkaTopic";
+    private final String TOPIC = "processTopic";
 
     private final FilmDao filmDao;
 
@@ -48,11 +49,27 @@ public class FilmManager implements FilmService {
 
     @Override
     public void add(Film film) throws IOException {
+        ProcessType type=ProcessType.ADD;
+        kafkaProducer(film,type);
+    }
 
+    @Override
+    public void update(Long id,Film film) throws IOException {
+        ProcessType type=ProcessType.UPDATE;
+        film.setId(id);
+        kafkaProducer(film,type);
+    }
+
+    @Override
+    public void delete(Long id) throws IOException {
+        ProcessType type=ProcessType.DELETE;
+        kafkaProducer(id,type);
+    }
+
+    public void kafkaProducer(Object content,ProcessType type) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-        ProcessMessage<Film> process = new ProcessMessage<>(
-                ProcessType.ADD,
-                film
+        ProcessMessage<Object> process = new ProcessMessage<>(
+                 type,content
         );
 
         var pm = objectMapper.writeValueAsString(process);
@@ -73,3 +90,4 @@ public class FilmManager implements FilmService {
         });
     }
 }
+

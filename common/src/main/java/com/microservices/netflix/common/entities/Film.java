@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 import java.util.TimeZone;
 
 @Data
@@ -51,7 +52,7 @@ public class Film {
 
     @JsonIgnore
     @Column(name = "created")
-    private TimeZone created;
+    private OffsetDateTime created;
 
     @JsonIgnore
     @Column(name = "created_by")
@@ -59,13 +60,13 @@ public class Film {
 
     @JsonIgnore
     @Column(name = "edited")
-    private TimeZone edited;
+    private OffsetDateTime edited;
 
     @Column(name = "edited_by")
     private int editedBy;
 
     @JsonIgnore
     @Column(name = "deleted")
-    private TimeZone deleted;
+    private OffsetDateTime deleted;
 
 }

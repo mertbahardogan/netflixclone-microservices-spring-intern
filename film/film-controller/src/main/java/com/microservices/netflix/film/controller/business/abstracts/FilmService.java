@@ -15,4 +15,9 @@ public interface FilmService {
     Optional<Film> findById(Long id);
 
     void add(Film film) throws IOException;
+
+    void update(Long id,Film film) throws IOException;
+
+    void delete(Long id) throws IOException;
+
 }

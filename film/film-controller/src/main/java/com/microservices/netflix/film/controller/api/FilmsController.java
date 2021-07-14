@@ -41,4 +41,24 @@ public class FilmsController {
             System.out.println(e.toString());
         }
     }
+
+    @PostMapping("update")
+    public void update(@RequestParam Long id,@RequestBody Film film){
+        try {
+            this.filmService.update(id,film);
+        }
+        catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
+
+    @PostMapping("delete")
+    public void delete(@RequestParam Long id){
+        try {
+            this.filmService.delete(id);
+        }
+        catch (Exception e){
+            System.out.println(e.toString());
+        }
+    }
 }
