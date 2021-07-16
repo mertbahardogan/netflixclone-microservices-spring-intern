@@ -7,6 +7,7 @@ import com.microservices.netflix.common.entities.Film;
 
 import com.microservices.netflix.common.messages.ProcessMessage;
 import com.microservices.netflix.common.messages.ProcessType;
+import com.microservices.netflix.common.results.*;
 import com.microservices.netflix.film.controller.business.abstracts.FilmService;
 import com.microservices.netflix.film.controller.dataAccess.FilmDao;
 import org.slf4j.Logger;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +26,8 @@ import java.util.Optional;
 public class FilmManager implements FilmService {
     private static final Logger logger = LoggerFactory.getLogger(FilmManager.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final String TOPIC = "processTopic";
+    private final String TOPIC = "processTopic"; //hata var //"${ms.topic.process}"
+    private final String TOPIC_DENE = ("${ms.topic.process}");
 
     private final FilmDao filmDao;
 
@@ -37,43 +38,67 @@ public class FilmManager implements FilmService {
     }
 
     @Override
-    public List<Film> findAll() {
-        return this.filmDao.findAll();
+    public DataResult<List<Film>> findAll() {
+        try {
+            return new SuccessDataResult<List<Film>>(this.filmDao.findAll(), "Başarıyla listelendi.");
+        } catch (Exception e) {
+            return new ErrorDataResult<>(e.toString());
+        }
     }
 
     @Override
-    public Optional<Film> findById(Long id) {
-        return this.filmDao.findById(id);
+    public DataResult<Optional<Film>> findById(Long id) {
+        try {
+            return new SuccessDataResult<Optional<Film>>(this.filmDao.findById(id), "Başarıyla listelendi.");
+        } catch (Exception e) {
+            return new ErrorDataResult<>(e.toString());
+        }
     }
 
 
     @Override
-    public void add(Film film) throws IOException {
-        ProcessType type=ProcessType.ADD;
-        kafkaProducer(film,type);
+    public Result add(Film film) {
+        try {
+            ProcessType type = ProcessType.ADD;
+            kafkaProducer(film, type);
+            return new SuccessResult("Ekleme işlemi başarılı.");
+        } catch (Exception e) {
+            return new ErrorResult(e.toString());
+        }
     }
 
     @Override
-    public void update(Long id,Film film) throws IOException {
-        ProcessType type=ProcessType.UPDATE;
-        film.setId(id);
-        kafkaProducer(film,type);
+    public Result update(Long id, Film film) {
+        try {
+            ProcessType type = ProcessType.UPDATE;
+            film.setId(id);
+            kafkaProducer(film, type);
+            return new SuccessResult("Güncelleme işlemi başarılı.");
+        } catch (Exception e) {
+            return new ErrorResult(e.toString());
+        }
     }
 
     @Override
-    public void delete(Long id) throws IOException {
-        ProcessType type=ProcessType.DELETE;
-        kafkaProducer(id,type);
+    public Result delete(Long id) {
+        try {
+            ProcessType type = ProcessType.DELETE;
+            kafkaProducer(id, type);
+            return new SuccessResult("Silme işlemi başarılı.");
+        } catch (Exception e) {
+            return new ErrorResult(e.toString());
+        }
     }
 
-    public void kafkaProducer(Object content,ProcessType type) throws JsonProcessingException {
+    public void kafkaProducer(Object content, ProcessType type) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         ProcessMessage<Object> process = new ProcessMessage<>(
-                 type,content
+                type, content
         );
 
         var pm = objectMapper.writeValueAsString(process);
         logger.info(String.format("$$$$ => Producing message: %s", pm));
+        logger.info(String.format("$$$$ =>TOPICCCC: %s", TOPIC_DENE));
 
         ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(TOPIC, pm);
         future.addCallback(new ListenableFutureCallback<>() {

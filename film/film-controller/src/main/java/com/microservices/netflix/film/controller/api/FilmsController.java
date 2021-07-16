@@ -2,10 +2,13 @@ package com.microservices.netflix.film.controller.api;
 
 import com.microservices.netflix.common.entities.Film;
 
+import com.microservices.netflix.common.results.DataResult;
+import com.microservices.netflix.common.results.Result;
 import com.microservices.netflix.film.controller.business.abstracts.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,43 +25,28 @@ public class FilmsController {
     }
 
     @GetMapping("findAll")
-    public List<Film> findAll() {
+    public DataResult<List<Film>> findAll() {
         return this.filmService.findAll();
     }
 
 
     @GetMapping("findById")
-    public Optional<Film> findById(@RequestParam Long id) {
+    public DataResult<Optional<Film>> findById(@RequestParam Long id) {
         return this.filmService.findById(id);
     }
 
     @PostMapping("add")
-    public void add(@RequestBody Film film){
-        try {
-            this.filmService.add(film);
-        }
-        catch (Exception e){
-            System.out.println(e.toString());
-        }
+    public Result add(@RequestBody Film film) throws IOException {
+        return this.filmService.add(film);
     }
 
     @PostMapping("update")
-    public void update(@RequestParam Long id,@RequestBody Film film){
-        try {
-            this.filmService.update(id,film);
-        }
-        catch (Exception e){
-            System.out.println(e.toString());
-        }
+    public Result update(@RequestParam Long id, @RequestBody Film film) throws IOException {
+        return this.filmService.update(id, film);
     }
 
     @PostMapping("delete")
-    public void delete(@RequestParam Long id){
-        try {
-            this.filmService.delete(id);
-        }
-        catch (Exception e){
-            System.out.println(e.toString());
-        }
+    public Result delete(@RequestParam Long id) throws IOException {
+        return this.filmService.delete(id);
     }
 }

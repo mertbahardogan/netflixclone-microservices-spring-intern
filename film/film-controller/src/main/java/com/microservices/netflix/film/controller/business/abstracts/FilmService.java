@@ -1,6 +1,8 @@
 package com.microservices.netflix.film.controller.business.abstracts;
 
 import com.microservices.netflix.common.entities.Film;
+import com.microservices.netflix.common.results.DataResult;
+import com.microservices.netflix.common.results.Result;
 import org.springframework.stereotype.Service;
 
 
@@ -10,14 +12,14 @@ import java.util.Optional;
 
 @Service
 public interface FilmService {
-    List<Film> findAll();
+    DataResult<List<Film>> findAll();
 
-    Optional<Film> findById(Long id);
+    DataResult<Optional<Film>> findById(Long id);
 
-    void add(Film film) throws IOException;
+    Result add(Film film) throws IOException;
 
-    void update(Long id,Film film) throws IOException;
+    Result update(Long id,Film film) throws IOException;
 
-    void delete(Long id) throws IOException;
+    Result delete(Long id) throws IOException;
 
 }

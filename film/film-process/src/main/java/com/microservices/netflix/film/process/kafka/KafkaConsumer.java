@@ -18,8 +18,9 @@ import java.util.LinkedHashMap;
 public class KafkaConsumer {
 
     private static final Logger logger = LoggerFactory.getLogger(KafkaConsumer.class);
-
     private final FilmProcessService filmProcessService;
+    private final String TOPIC = "${ms.topic.process}";
+
 
     @Autowired
     public KafkaConsumer(FilmProcessService filmProcessService) {
@@ -27,23 +28,22 @@ public class KafkaConsumer {
     }
 
 
-    @KafkaListener(topics = "processTopic", groupId = "group_id")
+    @KafkaListener(topics = TOPIC, groupId = "group_id")
     public void consume(String message) throws JsonProcessingException {
+
         ObjectMapper objectMapper = new ObjectMapper();
         Film film = new Film();
         long id = 0;
-        logger.info(String.format("$$$$ => Consumed message: %s", message));
 
+        logger.info(String.format("$$$$ => Consumed message: %s", message));
         ProcessMessage processMessage = objectMapper.readValue(message, ProcessMessage.class);
 
 
         if (processMessage.getContent() instanceof LinkedHashMap) {
             Object obj = processMessage.getContent();
             film = objectMapper.convertValue(obj, Film.class);
-        } else
-        if (processMessage.getContent() instanceof Integer) {
+        } else if (processMessage.getContent() instanceof Integer) {
             id = Long.valueOf(String.valueOf(processMessage.getContent()));
-            logger.info(String.format("$$$$ =>GİRDİ VE GELEN CONTENT ID TİPİ: %s", id));
         } else {
             logger.info(String.format("ERROR FROM: Kafka Consumer"));
         }
