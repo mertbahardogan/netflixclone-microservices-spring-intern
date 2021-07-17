@@ -6,7 +6,7 @@
 		<module>common</module>
 		<module>film</module>
 		<module>user</module>
-    </modules>
+	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>

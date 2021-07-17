@@ -13,6 +13,8 @@ import com.microservices.netflix.film.controller.dataAccess.FilmDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
@@ -23,11 +25,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@PropertySource("classpath:application.properties")
 public class FilmManager implements FilmService {
     private static final Logger logger = LoggerFactory.getLogger(FilmManager.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final String TOPIC = "processTopic"; //hata var //"${ms.topic.process}"
-    private final String TOPIC_DENE = ("${ms.topic.process}");
+    private final String TOPIC_DENE = "ms.topic.process";
 
     private final FilmDao filmDao;
 
