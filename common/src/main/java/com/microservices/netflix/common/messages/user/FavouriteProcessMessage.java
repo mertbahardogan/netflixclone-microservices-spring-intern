@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class FavouriteProcessMessage<T> {
     private FavouriteProcessType filmProcessType;
     private T content;
-    private T subContent;
 }

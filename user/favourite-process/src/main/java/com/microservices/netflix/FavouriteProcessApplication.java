@@ -8,5 +8,4 @@ public class FavouriteProcessApplication {
     public static void main(String[] args) {
         SpringApplication.run(FavouriteProcessApplication.class, args);
     }
-
 }

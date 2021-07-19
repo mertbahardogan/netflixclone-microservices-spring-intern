@@ -2,14 +2,14 @@ package com.microservices.netflix.controller.business.concretes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservices.netflix.common.entities.FavouriteFilm;
 import com.microservices.netflix.common.entities.Film;
-import com.microservices.netflix.common.messages.film.FilmProcessMessage;
-import com.microservices.netflix.common.messages.film.FilmProcessType;
 import com.microservices.netflix.common.messages.user.FavouriteProcessMessage;
 import com.microservices.netflix.common.messages.user.FavouriteProcessType;
 import com.microservices.netflix.common.results.*;
 import com.microservices.netflix.common.strings.SuccessMessages;
 import com.microservices.netflix.controller.business.abstracts.UserService;
+import com.microservices.netflix.controller.dataAccess.FavouriteFilmDao;
 import com.microservices.netflix.controller.dataAccess.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,18 +30,20 @@ public class UserManager implements UserService {
     private final String TOPIC = "favProcessTopic";
 
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private UserDao userDao;
+    private final UserDao userDao;
+    private final FavouriteFilmDao favouriteFilmDao;
 
     @Autowired
-    public UserManager(KafkaTemplate<String, String> kafkaTemplate, UserDao userDao) {
+    public UserManager(KafkaTemplate<String, String> kafkaTemplate, UserDao userDao, FavouriteFilmDao favouriteFilmDao) {
         this.kafkaTemplate = kafkaTemplate;
         this.userDao = userDao;
+        this.favouriteFilmDao = favouriteFilmDao;
     }
 
     @Override
     public DataResult<List<Film>> findAllByIsActive() {
         try {
-            return new SuccessDataResult<List<Film>>(this.userDao.findAllByIsActive(), SuccessMessages.allDataListed);
+            return new SuccessDataResult<>(this.userDao.findAllByIsActive(), SuccessMessages.allDataListed);
         } catch (Exception e) {
             return new ErrorDataResult<>(e.toString());
         }
@@ -51,17 +52,17 @@ public class UserManager implements UserService {
     @Override
     public DataResult<Optional<Film>> findByIsActiveAndId(Long id) {
         try {
-            return new SuccessDataResult<Optional<Film>>(this.userDao.findByIsActiveAndId(id), SuccessMessages.dataListed);
+            return new SuccessDataResult<>(this.userDao.findByIsActiveAndId(id), SuccessMessages.dataListed);
         } catch (Exception e) {
             return new ErrorDataResult<>(e.toString());
         }
     }
 
     @Override
-    public Result addToFav(int userId, int filmId) throws IOException {
+    public Result addToFav(FavouriteFilm favouriteFilm){
         try {
             FavouriteProcessType type = FavouriteProcessType.ADD_TO_FAV;
-            kafkaProducer(userId, filmId, type);
+            kafkaProducer(favouriteFilm, type);
             return new SuccessResult(SuccessMessages.dataAdded);
         } catch (Exception e) {
             return new ErrorResult(e.toString());
@@ -69,14 +70,29 @@ public class UserManager implements UserService {
     }
 
     @Override
-    public Result deleteFromFav(int userId, int filmId) throws IOException {
-        return null;
+    public Result deleteFromFav(int id)  {
+        try {
+            FavouriteProcessType type = FavouriteProcessType.DELETE_FROM_FAV;
+            kafkaProducer(id, type);
+            return new SuccessResult(SuccessMessages.dataDeleted);
+        } catch (Exception e) {
+            return new ErrorResult(e.toString());
+        }
     }
 
-    public void kafkaProducer(Object content, Object subContent, FavouriteProcessType type) throws JsonProcessingException {
+    @Override
+    public DataResult<List<FavouriteFilm>> findAllFavs() {
+        try {
+            return new SuccessDataResult<>(this.favouriteFilmDao.findAll(), SuccessMessages.allDataListed);
+        } catch (Exception e) {
+            return new ErrorDataResult<>(e.toString());
+        }
+    }
+
+    public void kafkaProducer(Object content, FavouriteProcessType type) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         FavouriteProcessMessage<Object> processMessage = new FavouriteProcessMessage<>(
-                type, content, subContent
+                type, content
         );
 
         var pm = objectMapper.writeValueAsString(processMessage);

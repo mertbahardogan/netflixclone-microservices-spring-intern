@@ -12,20 +12,12 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "rate_films")
-public class RateFilm {
+public class RateFilm extends UserProcess{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "serial", name = "id")
     private Long id;
-
-    @NotNull
-    @Column(name = "user_id")
-    private int userId;
-
-    @NotNull
-    @Column(name = "film_id")
-    private int filmId;
 
     @NotNull
     @Column(name = "rate")

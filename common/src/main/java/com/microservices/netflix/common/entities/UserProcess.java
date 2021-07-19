@@ -11,12 +11,24 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "favourite_films")
-public class FavouriteFilm extends UserProcess{
-
+@Table(name = "user_processes")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class UserProcess {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(columnDefinition = "serial", name = "id")
     private Long id;
+
+    @NotNull
+    @Column(name = "user_id")
+    private int userId;
+
+//    @NotNull
+//    @Column(name = "film_id")
+//    private int filmId;
+
+    @ManyToOne()
+    @JoinColumn(name = "film_id")
+    private Film film;
 
 }

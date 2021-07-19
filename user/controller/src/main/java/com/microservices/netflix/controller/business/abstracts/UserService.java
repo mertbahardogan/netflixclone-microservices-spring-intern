@@ -1,5 +1,6 @@
 package com.microservices.netflix.controller.business.abstracts;
 
+import com.microservices.netflix.common.entities.FavouriteFilm;
 import com.microservices.netflix.common.entities.Film;
 import com.microservices.netflix.common.results.DataResult;
 import com.microservices.netflix.common.results.Result;
@@ -15,7 +16,10 @@ public interface UserService {
 
     DataResult<Optional<Film>> findByIsActiveAndId(Long id);
 
-    Result addToFav(int userId,int filmId) throws IOException;
+    Result addToFav(FavouriteFilm favouriteFilm) throws IOException;
 
-    Result deleteFromFav(int userId,int filmId) throws IOException; //Manager bu idler ile işlem idsini elde etmeli ona göre işlem yapılmalı.
+    Result deleteFromFav(int id) throws IOException;
+
+    DataResult<List<FavouriteFilm>> findAllFavs();
+
 }

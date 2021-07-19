@@ -55,7 +55,7 @@ public class KafkaConsumer {
         } else if (filmProcessMessage.getFilmProcessType() == FilmProcessType.DELETE) {
             this.filmProcessService.deleteById(id);
         } else {
-            System.out.println("ERROR FROM: Kafka Consumer!");
+            System.out.println("ERROR FROM: FILM Kafka Consumer!");
         }
     }
 }

@@ -28,13 +28,23 @@ public class UsersController {
         return this.userService.findAllByIsActive();
     }
 
+    @GetMapping("findFavFilms")
+    public DataResult<List<FavouriteFilm>> findFavFilms() {
+        return this.userService.findAllFavs();
+    }
+
     @GetMapping("findByIsActiveAndId")
     public  DataResult<Optional<Film>> findAllByIsActive(@RequestParam Long id) {
         return this.userService.findByIsActiveAndId(id);
     }
 
     @PostMapping("addToFav")
-    public Result addToFav(@RequestParam int userId,@RequestParam int filmId) throws IOException {
-        return this.userService.addToFav(userId,filmId);
+    public Result addToFav(@RequestBody FavouriteFilm favouriteFilm) throws IOException {
+        return this.userService.addToFav(favouriteFilm);
+    }
+
+    @DeleteMapping("deleteFromFav")
+    public Result deleteFromFav(@RequestParam int id) throws IOException {
+        return this.userService.deleteFromFav(id);
     }
 }

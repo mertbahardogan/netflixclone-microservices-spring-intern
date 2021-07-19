@@ -1,6 +1,7 @@
 package com.microservices.netflix.common.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,12 +9,14 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "films")
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler", "userProcesses" })
 public class Film {
 
     @Id
@@ -68,4 +71,6 @@ public class Film {
     @Column(name = "deleted")
     private OffsetDateTime deleted;
 
+    @OneToMany(mappedBy = "film")
+    private List<UserProcess> userProcesses;
 }
