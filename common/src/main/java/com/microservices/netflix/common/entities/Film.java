@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
-import java.util.TimeZone;
 
 @Data
 @AllArgsConstructor

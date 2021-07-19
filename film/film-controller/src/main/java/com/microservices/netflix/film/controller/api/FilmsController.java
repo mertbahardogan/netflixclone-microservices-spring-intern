@@ -40,12 +40,12 @@ public class FilmsController {
         return this.filmService.add(film);
     }
 
-    @PostMapping("update")
+    @PutMapping("update")
     public Result update(@RequestParam Long id, @RequestBody Film film) throws IOException {
         return this.filmService.update(id, film);
     }
 
-    @PostMapping("delete")
+    @DeleteMapping("delete")
     public Result delete(@RequestParam Long id) throws IOException {
         return this.filmService.delete(id);
     }
