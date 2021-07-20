@@ -41,4 +41,27 @@ public class FilmProcessManager implements FilmProcessService {
     public void deleteById(Long id) {
         this.processDao.deleteById(id);
     }
+
+    @Override
+    public void setActive(Long id) {
+        Film value = this.processDao.findById(id).get();
+        if (value.isActive()==false){
+            value.setActive(true);
+            this.processDao.save(value);
+        }
+        else
+            System.out.println("SET ACTIVE ÇALIŞAMAZ ÇÜNKÜ ZATEN TRUE!");
+    }
+
+    @Override
+    public void setPassive(Long id) {
+        Film value = this.processDao.findById(id).get();
+        if (value.isActive()==true){
+            value.setActive(false);
+            this.processDao.save(value);
+        }
+        else
+            System.out.println("SET ACTIVE ÇALIŞAMAZ ÇÜNKÜ ZATEN FALSE!");
+
+    }
 }

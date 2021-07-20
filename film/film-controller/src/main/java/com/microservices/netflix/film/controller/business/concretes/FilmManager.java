@@ -14,6 +14,7 @@ import com.microservices.netflix.film.controller.dataAccess.FilmDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,9 @@ import java.util.Optional;
 @Service
 public class FilmManager implements FilmService {
     private static final Logger logger = LoggerFactory.getLogger(FilmManager.class);
-    private final String TOPIC = "crudProcessTopic";
+
+    @Value("${ms.topic.process}")
+    private String topic;
 
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final FilmDao filmDao;
@@ -40,7 +43,7 @@ public class FilmManager implements FilmService {
     @Override
     public DataResult<List<Film>> findAll() {
         try {
-            return new SuccessDataResult<List<Film>>(this.filmDao.findAll(), SuccessMessages.allDataListed);
+            return new SuccessDataResult<>(this.filmDao.findAll(), SuccessMessages.allDataListed);
         } catch (Exception e) {
             return new ErrorDataResult<>(e.toString());
         }
@@ -49,7 +52,7 @@ public class FilmManager implements FilmService {
     @Override
     public DataResult<Optional<Film>> findById(Long id) {
         try {
-            return new SuccessDataResult<Optional<Film>>(this.filmDao.findById(id), SuccessMessages.dataListed);
+            return new SuccessDataResult<>(this.filmDao.findById(id), SuccessMessages.dataListed);
         } catch (Exception e) {
             return new ErrorDataResult<>(e.toString());
         }
@@ -90,6 +93,28 @@ public class FilmManager implements FilmService {
         }
     }
 
+    @Override
+    public Result setActive(Long id) {
+        try {
+            FilmProcessType type = FilmProcessType.SET_ACTIVE;
+            kafkaProducer(id, type);
+            return new SuccessResult(SuccessMessages.dataUpdated);
+        } catch (Exception e) {
+            return new ErrorResult(e.toString());
+        }
+    }
+
+    @Override
+    public Result setPassive(Long id) {
+        try {
+            FilmProcessType type = FilmProcessType.SET_PASSIVE;
+            kafkaProducer(id, type);
+            return new SuccessResult(SuccessMessages.dataUpdated);
+        } catch (Exception e) {
+            return new ErrorResult(e.toString());
+        }
+    }
+
     public void kafkaProducer(Object content, FilmProcessType type) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         FilmProcessMessage<Object> process = new FilmProcessMessage<>(
@@ -97,7 +122,9 @@ public class FilmManager implements FilmService {
         );
 
         var pm = objectMapper.writeValueAsString(process);
-        ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(TOPIC, pm);
+        logger.info(String.format("$$$$ => Producing message: %s", pm));
+
+        ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(topic, pm);
         future.addCallback(new ListenableFutureCallback<>() {
 
             @Override
@@ -112,6 +139,3 @@ public class FilmManager implements FilmService {
         });
     }
 }
-
-//        logger.info(String.format("$$$$ => Producing message: %s", pm));
-//                logger.info(String.format("$$$$ =>TOPICCCC: %s", TOPIC));

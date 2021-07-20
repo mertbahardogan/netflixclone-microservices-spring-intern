@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.netflix.common.entities.FavouriteFilm;
 import com.microservices.netflix.common.messages.user.FavouriteProcessMessage;
-import com.microservices.netflix.common.messages.user.FavouriteProcessType;
 import com.microservices.netflix.favourite.process.business.abstracts.FavouriteProcessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,15 +43,21 @@ public class KafkaConsumer {
         } else if (favouriteProcessMessage.getContent() instanceof Integer) {
             id = Long.valueOf(String.valueOf(favouriteProcessMessage.getContent()));
         } else {
-            logger.info(String.format("ERROR FROM: FAV Kafka Consumer"));
+            logger.info(String.format("ERROR FROM: FAVOURITE distrbuter Kafka Consumer"));
         }
 
-        if (favouriteProcessMessage.getFilmProcessType() == FavouriteProcessType.ADD_TO_FAV) {
-            this.favouriteProcessService.addToFav(favouriteFilm);
-        } else if (favouriteProcessMessage.getFilmProcessType() == FavouriteProcessType.DELETE_FROM_FAV) {
-            this.favouriteProcessService.deleteFromFav(id);
-        } else {
-            System.out.println("ERROR FROM: Kafka Consumer!");
+
+        switch (favouriteProcessMessage.getFilmProcessType()) {
+            case ADD_TO_FAV:
+                this.favouriteProcessService.addToFav(favouriteFilm);
+                break;
+            case DELETE_FROM_FAV:
+                this.favouriteProcessService.deleteFromFav(id);
+                break;
+            default:
+                System.out.println("ERROR FROM: FAVOURITE switch Kafka Consumer");
+                break;
         }
+
     }
 }

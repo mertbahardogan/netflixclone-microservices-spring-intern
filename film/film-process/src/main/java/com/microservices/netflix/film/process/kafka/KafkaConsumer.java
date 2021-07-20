@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.netflix.common.entities.Film;
 import com.microservices.netflix.common.messages.film.FilmProcessMessage;
-import com.microservices.netflix.common.messages.film.FilmProcessType;
 import com.microservices.netflix.film.process.business.abstracts.FilmProcessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,24 +37,36 @@ public class KafkaConsumer {
         logger.info(String.format("$$$$ => Consumed message: %s", message));
         FilmProcessMessage filmProcessMessage = objectMapper.readValue(message, FilmProcessMessage.class);
 
-
+        // GELEN MESAJIN DEĞERİNE GÖRE DESERIALIZE EDİLDİĞİ KOD BLOĞU
         if (filmProcessMessage.getContent() instanceof LinkedHashMap) {
             Object obj = filmProcessMessage.getContent();
             film = objectMapper.convertValue(obj, Film.class);
         } else if (filmProcessMessage.getContent() instanceof Integer) {
             id = Long.valueOf(String.valueOf(filmProcessMessage.getContent()));
         } else {
-            logger.info(String.format("ERROR FROM: Kafka Consumer"));
+            logger.info(String.format("ERROR FROM: FILM deserialize Kafka Consumer"));
         }
 
-        if (filmProcessMessage.getFilmProcessType() == FilmProcessType.ADD) {
-            this.filmProcessService.add(film);
-        } else if (filmProcessMessage.getFilmProcessType() == FilmProcessType.UPDATE) {
-            this.filmProcessService.update(film.getId(), film);
-        } else if (filmProcessMessage.getFilmProcessType() == FilmProcessType.DELETE) {
-            this.filmProcessService.deleteById(id);
-        } else {
-            System.out.println("ERROR FROM: FILM Kafka Consumer!");
+        // GELEN MESAJIN TİPİNE GÖRE SERVİSE ATANDIĞI KOD BLOĞU
+        switch (filmProcessMessage.getFilmProcessType()) {
+            case ADD:
+                this.filmProcessService.add(film);
+                break;
+            case UPDATE:
+                this.filmProcessService.update(film.getId(), film);
+                break;
+            case DELETE:
+                this.filmProcessService.deleteById(id);
+                break;
+            case SET_ACTIVE:
+                this.filmProcessService.setActive(id);
+                break;
+            case SET_PASSIVE:
+                this.filmProcessService.setPassive(id);
+                break;
+            default:
+                System.out.println("ERROR FROM: FILM switch Kafka Consumer");
+                break;
         }
     }
 }

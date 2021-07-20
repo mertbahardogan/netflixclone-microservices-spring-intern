@@ -14,6 +14,7 @@ import com.microservices.netflix.controller.dataAccess.UserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,8 @@ import java.util.Optional;
 public class UserManager implements UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserManager.class);
-    private final String TOPIC = "favProcessTopic";
+    @Value("${ms.topic.favourite}")
+    private String topic;
 
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final UserDao userDao;
@@ -97,9 +99,8 @@ public class UserManager implements UserService {
 
         var pm = objectMapper.writeValueAsString(processMessage);
         logger.info(String.format("$$$$ => Producing message: %s", pm));
-        logger.info(String.format("$$$$ =>TOPICCCC: %s", TOPIC));
 
-        ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(TOPIC, pm);
+        ListenableFuture<SendResult<String, String>> future = this.kafkaTemplate.send(topic, pm);
         future.addCallback(new ListenableFutureCallback<>() {
 
             @Override

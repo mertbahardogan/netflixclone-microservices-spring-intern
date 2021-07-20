@@ -3,10 +3,10 @@ package com.microservices.netflix.film.controller.business.abstracts;
 import com.microservices.netflix.common.entities.Film;
 import com.microservices.netflix.common.results.DataResult;
 import com.microservices.netflix.common.results.Result;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,10 +16,13 @@ public interface FilmService {
 
     DataResult<Optional<Film>> findById(Long id);
 
-    Result add(Film film) throws IOException;
+    Result add(Film film);
 
-    Result update(Long id,Film film) throws IOException;
+    Result update(Long id,Film film) ;
 
-    Result delete(Long id) throws IOException;
+    Result delete(Long id) ;
 
+    Result setActive(Long id) ;
+
+    Result setPassive(Long id) ;
 }

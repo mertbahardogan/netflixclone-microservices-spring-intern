@@ -8,7 +8,6 @@ import com.microservices.netflix.film.controller.business.abstracts.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,17 +35,27 @@ public class FilmsController {
     }
 
     @PostMapping("add")
-    public Result add(@RequestBody Film film) throws IOException {
+    public Result add(@RequestBody Film film)  {
         return this.filmService.add(film);
     }
 
     @PutMapping("update")
-    public Result update(@RequestParam Long id, @RequestBody Film film) throws IOException {
+    public Result update(@RequestParam Long id, @RequestBody Film film)  {
         return this.filmService.update(id, film);
     }
 
     @DeleteMapping("delete")
-    public Result delete(@RequestParam Long id) throws IOException {
+    public Result delete(@RequestParam Long id) {
         return this.filmService.delete(id);
+    }
+
+    @PatchMapping("setActive")
+    public Result setActive(@RequestParam Long id)  {
+        return this.filmService.setActive(id);
+    }
+
+    @PatchMapping("setPassive")
+    public Result setPassive(@RequestParam Long id)  {
+        return this.filmService.setPassive(id);
     }
 }
