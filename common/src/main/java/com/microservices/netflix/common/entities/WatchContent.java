@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "watch_content")
+@Table(name = "watch_contents")
 public class WatchContent extends UserProcess{
 
     @Id
