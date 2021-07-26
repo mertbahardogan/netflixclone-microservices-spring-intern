@@ -83,9 +83,18 @@ public class UserManager implements UserService {
     }
 
     @Override
-    public DataResult<List<FavouriteFilm>> findAllFavs() {
+    public DataResult<List<FavouriteFilm>> findFavouriteFilms() {
         try {
             return new SuccessDataResult<>(this.favouriteFilmDao.findAll(), SuccessMessages.allDataListed);
+        } catch (Exception e) {
+            return new ErrorDataResult<>(e.toString());
+        }
+    }
+
+    @Override
+    public DataResult<List<FavouriteFilm>> findFavouriteFilmsByIsActiveAndUserId(int userId) {
+        try {
+            return new SuccessDataResult<>(this.favouriteFilmDao.findByIsActiveAndUserId(userId), SuccessMessages.allDataListed);
         } catch (Exception e) {
             return new ErrorDataResult<>(e.toString());
         }

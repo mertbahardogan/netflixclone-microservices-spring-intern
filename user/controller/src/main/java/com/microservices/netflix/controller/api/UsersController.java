@@ -28,14 +28,19 @@ public class UsersController {
         return this.userService.findAllByIsActive();
     }
 
-    @GetMapping("findFavFilms")
-    public DataResult<List<FavouriteFilm>> findFavFilms() {
-        return this.userService.findAllFavs();
-    }
-
     @GetMapping("findByIsActiveAndId")
     public  DataResult<Optional<Film>> findAllByIsActive(@RequestParam Long id) {
         return this.userService.findByIsActiveAndId(id);
+    }
+
+    @GetMapping("findFavouriteFilms")
+    public DataResult<List<FavouriteFilm>> findFavouriteFilms() {
+        return this.userService.findFavouriteFilms();
+    }
+
+    @GetMapping("findFavouriteFilmsByIsActiveAndUserId")
+    public  DataResult<List<FavouriteFilm>> findFavouriteFilmsByIsActiveAndUserId(@RequestParam int userId) {
+        return this.userService.findFavouriteFilmsByIsActiveAndUserId(userId);
     }
 
     @PostMapping("addToFav")

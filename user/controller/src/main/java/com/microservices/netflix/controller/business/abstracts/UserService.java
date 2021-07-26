@@ -20,6 +20,7 @@ public interface UserService {
 
     Result deleteFromFav(int id) throws IOException;
 
-    DataResult<List<FavouriteFilm>> findAllFavs();
+    DataResult<List<FavouriteFilm>> findFavouriteFilms();
 
+    DataResult<List<FavouriteFilm>> findFavouriteFilmsByIsActiveAndUserId(int userId);
 }

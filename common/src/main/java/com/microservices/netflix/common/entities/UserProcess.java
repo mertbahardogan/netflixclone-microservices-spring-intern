@@ -23,10 +23,6 @@ public class UserProcess {
     @Column(name = "user_id")
     private int userId;
 
-//    @NotNull
-//    @Column(name = "film_id")
-//    private int filmId;
-
     @ManyToOne()
     @JoinColumn(name = "film_id")
     private Film film;
