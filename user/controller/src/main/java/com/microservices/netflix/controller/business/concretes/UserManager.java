@@ -11,6 +11,7 @@ import com.microservices.netflix.common.strings.SuccessMessages;
 import com.microservices.netflix.controller.business.abstracts.UserService;
 import com.microservices.netflix.controller.dataAccess.FavouriteFilmDao;
 import com.microservices.netflix.controller.dataAccess.UserDao;
+import com.microservices.netflix.controller.kafka.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import java.util.Optional;
 
 @Service
 public class UserManager implements UserService {
+
 
     private static final Logger logger = LoggerFactory.getLogger(UserManager.class);
     @Value("${ms.topic.favourite}")
@@ -64,7 +66,8 @@ public class UserManager implements UserService {
     public Result addToFav(FavouriteFilm favouriteFilm){
         try {
             FavouriteProcessType type = FavouriteProcessType.ADD_TO_FAV;
-            kafkaProducer(favouriteFilm, type);
+//            KafkaProducer.kafkaProducer(favouriteFilm, type);
+            kafkaProducer(favouriteFilm,type);
             return new SuccessResult(SuccessMessages.dataAdded);
         } catch (Exception e) {
             return new ErrorResult(e.toString());
@@ -75,7 +78,8 @@ public class UserManager implements UserService {
     public Result deleteFromFav(int id)  {
         try {
             FavouriteProcessType type = FavouriteProcessType.DELETE_FROM_FAV;
-            kafkaProducer(id, type);
+//            KafkaProducer.kafkaProducer(id, type);
+            kafkaProducer(id,type);
             return new SuccessResult(SuccessMessages.dataDeleted);
         } catch (Exception e) {
             return new ErrorResult(e.toString());
