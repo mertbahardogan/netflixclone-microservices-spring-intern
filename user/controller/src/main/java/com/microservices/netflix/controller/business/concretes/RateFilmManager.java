@@ -5,9 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.netflix.common.entities.RateFilm;
 import com.microservices.netflix.common.messages.user.rate.RateProcessMessage;
 import com.microservices.netflix.common.messages.user.rate.RateProcessType;
-import com.microservices.netflix.common.results.ErrorResult;
-import com.microservices.netflix.common.results.Result;
-import com.microservices.netflix.common.results.SuccessResult;
+import com.microservices.netflix.common.results.*;
 import com.microservices.netflix.common.strings.SuccessMessages;
 import com.microservices.netflix.controller.business.abstracts.RateFilmService;
 import com.microservices.netflix.controller.dataAccess.RateFilmDao;
@@ -20,6 +18,8 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
+
+import java.util.List;
 
 
 @Service
@@ -71,6 +71,16 @@ public class RateFilmManager implements RateFilmService {
             return new ErrorResult(e.toString());
         }
     }
+
+    @Override
+    public DataResult<List<RateFilm>> findRatedFilmsByIsActiveAndUserId(int userId) {
+        try {
+            return new SuccessDataResult<>(this.rateFilmDao.findByIsActiveAndUserId(userId), SuccessMessages.allDataListed);
+        } catch (Exception e) {
+            return new ErrorDataResult<>(e.toString());
+        }
+    }
+
 
     public void kafkaProducer(Object content, RateProcessType type) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();

@@ -1,13 +1,14 @@
 package com.microservices.netflix.controller.api;
 
-import com.microservices.netflix.common.entities.Film;
 import com.microservices.netflix.common.entities.RateFilm;
+import com.microservices.netflix.common.results.DataResult;
 import com.microservices.netflix.common.results.Result;
 import com.microservices.netflix.controller.business.abstracts.RateFilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/rate-films/")
@@ -33,5 +34,10 @@ public class RateFilmsController {
     @DeleteMapping("delete")
     public Result add(@RequestParam Long id) throws IOException {
         return this.rateFilmService.delete(id);
+    }
+
+    @GetMapping("findRatedFilmsByIsActiveAndUserId")
+    public DataResult<List<RateFilm>> findRatedFilmsByIsActiveAndUserId(@RequestParam int userId) throws IOException {
+        return this.rateFilmService.findRatedFilmsByIsActiveAndUserId(userId);
     }
 }
