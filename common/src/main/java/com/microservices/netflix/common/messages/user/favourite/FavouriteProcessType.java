@@ -1,4 +1,4 @@
-package com.microservices.netflix.common.messages.user;
+package com.microservices.netflix.common.messages.user.favourite;
 
 public enum FavouriteProcessType {
     ADD_TO_FAV(0),

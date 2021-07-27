@@ -3,7 +3,7 @@ package com.microservices.netflix.favourite.process.kafka;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.netflix.common.entities.FavouriteFilm;
-import com.microservices.netflix.common.messages.user.FavouriteProcessMessage;
+import com.microservices.netflix.common.messages.user.favourite.FavouriteProcessMessage;
 import com.microservices.netflix.favourite.process.business.abstracts.FavouriteProcessService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

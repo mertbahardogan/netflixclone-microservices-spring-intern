@@ -1,4 +1,4 @@
-package com.microservices.netflix.common.messages.user;
+package com.microservices.netflix.common.messages.user.rate;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FavouriteProcessMessage<T> {
-    private FavouriteProcessType filmProcessType;
+public class RateProcessMessage<T> {
+    private RateProcessType rateProcessType;
     private T content;
 }

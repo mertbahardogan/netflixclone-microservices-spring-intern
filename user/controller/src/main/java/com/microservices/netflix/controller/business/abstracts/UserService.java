@@ -16,11 +16,5 @@ public interface UserService {
 
     DataResult<Optional<Film>> findByIsActiveAndId(Long id);
 
-    Result addToFav(FavouriteFilm favouriteFilm) throws IOException;
 
-    Result deleteFromFav(int id) throws IOException;
-
-    DataResult<List<FavouriteFilm>> findFavouriteFilms();
-
-    DataResult<List<FavouriteFilm>> findFavouriteFilmsByIsActiveAndUserId(int userId);
 }
