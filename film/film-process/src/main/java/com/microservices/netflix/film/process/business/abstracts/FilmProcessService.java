@@ -11,7 +11,7 @@ public interface FilmProcessService {
 
     void deleteById(Long id);
 
-    void setActive(Long id);
+    void settingActive(Long id);
 
-    void setPassive(Long id);
+    void settingPassive(Long id);
 }

@@ -64,6 +64,7 @@ public class Film {
     @Column(name = "edited")
     private OffsetDateTime edited;
 
+    @JsonIgnore
     @Column(name = "edited_by")
     private int editedBy;
 

@@ -9,5 +9,5 @@ import java.util.Optional;
 @Repository
 public interface FilmProcessDao extends JpaRepository<Film,Long> {
     Optional<Film> findById(Long id);
-    void deleteById(Long id);
+//    void deleteById(Long id);
 }

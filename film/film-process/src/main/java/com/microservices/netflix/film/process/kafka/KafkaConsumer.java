@@ -59,10 +59,10 @@ public class KafkaConsumer {
                 this.filmProcessService.deleteById(id);
                 break;
             case SET_ACTIVE:
-                this.filmProcessService.setActive(id);
+                this.filmProcessService.settingActive(id);
                 break;
             case SET_PASSIVE:
-                this.filmProcessService.setPassive(id);
+                this.filmProcessService.settingPassive(id);
                 break;
             default:
                 System.out.println("ERROR FROM: FILM switch Kafka Consumer");
