@@ -26,5 +26,4 @@ public class UserProcess {
     @ManyToOne()
     @JoinColumn(name = "film_id")
     private Film film;
-
 }

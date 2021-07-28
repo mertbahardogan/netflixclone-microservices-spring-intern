@@ -37,9 +37,6 @@
 
         <spring-cloud.version>3.0.2</spring-cloud.version>
         <spring-cloud-dependencies.version>2020.0.3</spring-cloud-dependencies.version>
-
-<!--       <spring-boot-autoconfigure.version>2.5.3</spring-boot-autoconfigure.version>-->
-
     </properties>
 
     <dependencyManagement>
@@ -129,10 +126,9 @@
 
 <!--            <dependency>-->
 <!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-autoconfigure</artifactId>-->
-<!--                <version>${spring-boot-autoconfigure.version}</version>-->
+<!--                <artifactId>spring-boot-starter-security</artifactId>-->
+<!--                <version>${spring-boot.version}</version>-->
 <!--            </dependency>-->
-
         </dependencies>
     </dependencyManagement>
 
