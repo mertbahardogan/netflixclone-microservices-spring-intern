@@ -1,8 +1,9 @@
 package com.microservices.netflix.common.results;
 
 public class Result {
-    private boolean success;
+    private final boolean success;
     private String message;
+    private String customStatusCodes;
 
     public Result(boolean success) {
         this.success = success;
@@ -13,6 +14,12 @@ public class Result {
         this.message = message;
     }
 
+    public Result(boolean success, String message, String customStatusCodes) {
+        this(success);
+        this.message = message;
+        this.customStatusCodes = customStatusCodes;
+    }
+
     public boolean isSuccess() {
         return this.success;
     }
@@ -21,4 +28,7 @@ public class Result {
         return this.message;
     }
 
+    public String getCustomStatusCode() {
+        return this.customStatusCodes;
+    }
 }

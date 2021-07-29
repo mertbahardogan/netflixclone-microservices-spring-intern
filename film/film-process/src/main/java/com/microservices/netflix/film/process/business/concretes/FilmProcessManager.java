@@ -6,9 +6,7 @@ import com.microservices.netflix.film.process.dataAccess.FilmProcessDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.util.Date;
 
 @Service
@@ -29,8 +27,6 @@ public class FilmProcessManager implements FilmProcessService {
 
     @Override
     public void update(Long id, Film film) {
-        OffsetDateTime offsetDTU = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.of("+03:00"));
-
         Film valueUpdate = this.processDao.findById(id).get();
         valueUpdate.setName(film.getName());
         valueUpdate.setSummary(film.getSummary());
@@ -39,6 +35,8 @@ public class FilmProcessManager implements FilmProcessService {
         valueUpdate.setTime(film.getTime());
         valueUpdate.setCategory(film.getCategory());
         valueUpdate.setActive(film.isActive());
+
+        OffsetDateTime offsetDTU = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.of("+03:00"));
         valueUpdate.setEdited(offsetDTU);
         this.processDao.save(valueUpdate);
     }
@@ -49,7 +47,6 @@ public class FilmProcessManager implements FilmProcessService {
         valueDelete.setActive(false);
         OffsetDateTime offsetDTD = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.of("+03:00"));
         valueDelete.setDeleted(offsetDTD);
-//        this.processDao.deleteById(id);
         this.processDao.save(valueDelete);
     }
 

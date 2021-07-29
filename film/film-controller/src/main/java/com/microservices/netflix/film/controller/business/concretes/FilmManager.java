@@ -8,8 +8,10 @@ import com.microservices.netflix.common.entities.Film;
 import com.microservices.netflix.common.messages.film.FilmProcessMessage;
 import com.microservices.netflix.common.messages.film.FilmProcessType;
 import com.microservices.netflix.common.results.*;
+import com.microservices.netflix.common.strings.ErrorMessages;
 import com.microservices.netflix.common.strings.SuccessMessages;
 import com.microservices.netflix.film.controller.business.abstracts.FilmService;
+import com.microservices.netflix.film.controller.business.helpers.FilmCheckHelper;
 import com.microservices.netflix.film.controller.dataAccess.FilmDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,11 +28,9 @@ import java.util.Optional;
 
 @Service
 public class FilmManager implements FilmService {
-    private static final Logger logger = LoggerFactory.getLogger(FilmManager.class);
-
     @Value("${ms.topic.process}")
     private String topic;
-
+    private static final Logger logger = LoggerFactory.getLogger(FilmManager.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final FilmDao filmDao;
 
@@ -62,6 +62,23 @@ public class FilmManager implements FilmService {
     @Override
     public Result add(Film film) {
         try {
+            var checkFields = !FilmCheckHelper.isFillFields(film);
+            var checkFilm = this.filmDao.findByName(film.getName()).size() != 0;
+
+            if (checkFields || checkFilm) {
+                String errorMessage = "";
+                CustomStatusCodes statusCode = CustomStatusCodes.INITIAL_CODE;
+                if (checkFields) {
+                    errorMessage = ErrorMessages.allFieldsRequired;
+                    statusCode = CustomStatusCodes.ALL_FIELDS_REQUIRED;
+                }
+                if (checkFilm) {
+                    errorMessage = ErrorMessages.objectAlreadyExist;
+                    statusCode = CustomStatusCodes.OBJECT_ALREADY_EXIST;
+                }
+                return new ErrorResult(errorMessage, statusCode.toString());
+            }
+
             FilmProcessType type = FilmProcessType.ADD;
             kafkaProducer(film, type);
             return new SuccessResult(SuccessMessages.dataAdded);
@@ -73,6 +90,25 @@ public class FilmManager implements FilmService {
     @Override
     public Result update(Long id, Film film) {
         try {
+            var checkFields = !FilmCheckHelper.isFillFields(film);
+            var checkFilm = this.filmDao.findByName(film.getName()).size() != 0;
+            //Ama bu objecti hariç tutmamız lazım.bunun idsi ile geleni kıyasla aynıysa
+            //sorun yok
+
+            if (checkFields || checkFilm) {
+                String errorMessage = "";
+                CustomStatusCodes statusCode = CustomStatusCodes.INITIAL_CODE;
+                if (checkFields) {
+                    errorMessage = ErrorMessages.allFieldsRequired;
+                    statusCode = CustomStatusCodes.ALL_FIELDS_REQUIRED;
+                }
+                if (checkFilm) {
+                    errorMessage = ErrorMessages.objectAlreadyExist;
+                    statusCode = CustomStatusCodes.OBJECT_ALREADY_EXIST;
+                }
+                return new ErrorResult(errorMessage, statusCode.toString());
+            }
+
             FilmProcessType type = FilmProcessType.UPDATE;
             film.setId(id);
             kafkaProducer(film, type);
@@ -85,6 +121,7 @@ public class FilmManager implements FilmService {
     @Override
     public Result delete(Long id) {
         try {
+            var checkFilm = this.filmDao.findById(id).get().getId() != null; //bu hatayı tetikliyor
             FilmProcessType type = FilmProcessType.DELETE;
             kafkaProducer(id, type);
             return new SuccessResult(SuccessMessages.dataDeleted);
@@ -93,6 +130,7 @@ public class FilmManager implements FilmService {
         }
     }
 
+//    TODO: Ayarları buraya çekelim
     @Override
     public Result setActive(Long id) {
         try {

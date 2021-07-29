@@ -15,4 +15,6 @@ public interface FilmDao extends JpaRepository<Film, Long> {
     List<Film> findAll();
 
     Optional<Film> findById(Long id);
+
+    List<Film> findByName(String name);
 }

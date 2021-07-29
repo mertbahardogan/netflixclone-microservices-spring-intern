@@ -28,7 +28,6 @@ public class FilmsController {
         return this.filmService.findAll();
     }
 
-
     @GetMapping("findById")
     public DataResult<Optional<Film>> findById(@RequestParam Long id) {
         return this.filmService.findById(id);
