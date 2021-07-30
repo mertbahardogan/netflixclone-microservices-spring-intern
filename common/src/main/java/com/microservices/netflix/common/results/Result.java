@@ -3,7 +3,7 @@ package com.microservices.netflix.common.results;
 public class Result {
     private final boolean success;
     private String message;
-    private String customStatusCodes;
+    private int customStatusCodes;
 
     public Result(boolean success) {
         this.success = success;
@@ -14,7 +14,7 @@ public class Result {
         this.message = message;
     }
 
-    public Result(boolean success, String message, String customStatusCodes) {
+    public Result(boolean success, String message, int customStatusCodes) {
         this(success);
         this.message = message;
         this.customStatusCodes = customStatusCodes;
@@ -28,7 +28,7 @@ public class Result {
         return this.message;
     }
 
-    public String getCustomStatusCode() {
+    public int getCustomStatusCode() {
         return this.customStatusCodes;
     }
 }

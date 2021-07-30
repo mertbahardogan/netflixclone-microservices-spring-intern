@@ -6,6 +6,10 @@ public class ErrorDataResult<T> extends DataResult<T>{
         super(data, false, message);
     }
 
+    public ErrorDataResult( String message,int customStatusCode) {
+        super(null, false, message,customStatusCode);
+    }
+
     public ErrorDataResult(T data) {
         super(data,false);
     }

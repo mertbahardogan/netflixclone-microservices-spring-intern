@@ -1,25 +1,28 @@
 package com.microservices.netflix.common.results;
 
 public enum CustomStatusCodes {
+    GENERAL_CATCH_ERROR(80001),
+    ALL_FIELDS_REQUIRED(80002),
+    OBJECT_NOT_FOUND(80003),
+    OBJECT_ALREADY_EXIST(80004),
+    OBJECT_HAS_SAME_VALUE(80005),
+    DATA_NOT_LISTED(80006);
 
-    INITIAL_CODE("0000"),
-    OBJECT_ALREADY_EXIST("4001"),
-    ALL_FIELDS_REQUIRED("4002"),
-    OBJECT_NOT_FOUND("4003");
+    public final int value;
 
-    public final String value;
-
-    CustomStatusCodes(String value) {
+    CustomStatusCodes(int value) {
         this.value = value;
     }
 
-    @Override
-    public String toString() {
+    public int getValue(){
         return value;
     }
+
+//    @Override
+//    public String toString() {
+//        return value;
+//    }
 }
 
-//Success için kod dönüyor mu?
 //Dönüş tipi doğru mu?
 //Kontrolleri controllerda yapıyorum doğru mu?
-//Normal errorlar için kod gerekli mi?

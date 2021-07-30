@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
@@ -43,31 +44,32 @@ public class FilmManager implements FilmService {
     @Override
     public DataResult<List<Film>> findAll() {
         try {
-            return new SuccessDataResult<>(this.filmDao.findAll(), SuccessMessages.allDataListed);
+            return new SuccessDataResult<>(this.filmDao.findAll(), SuccessMessages.allDataListed, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorDataResult<>(e.toString());
+            return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
         }
     }
 
     @Override
     public DataResult<Optional<Film>> findById(Long id) {
         try {
-            return new SuccessDataResult<>(this.filmDao.findById(id), SuccessMessages.dataListed);
+            return new SuccessDataResult<>(this.filmDao.findById(id), SuccessMessages.dataListed, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorDataResult<>(e.toString());
+            return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
         }
     }
 
 
     @Override
     public Result add(Film film) {
-        try {
-            var checkFields = !FilmCheckHelper.isFillFields(film);
-            var checkFilm = this.filmDao.findByName(film.getName()).size() != 0;
+        CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
 
-            if (checkFields || checkFilm) {
+        try {
+            var getFilm = this.filmDao.findByName(film.getName());
+            var checkFields = !FilmCheckHelper.isFillFields(film);
+            var checkFilm = getFilm.size() != 0;
+            if (checkFields) {
                 String errorMessage = "";
-                CustomStatusCodes statusCode = CustomStatusCodes.INITIAL_CODE;
                 if (checkFields) {
                     errorMessage = ErrorMessages.allFieldsRequired;
                     statusCode = CustomStatusCodes.ALL_FIELDS_REQUIRED;
@@ -76,28 +78,29 @@ public class FilmManager implements FilmService {
                     errorMessage = ErrorMessages.objectAlreadyExist;
                     statusCode = CustomStatusCodes.OBJECT_ALREADY_EXIST;
                 }
-                return new ErrorResult(errorMessage, statusCode.toString());
+                return new ErrorResult(errorMessage, statusCode.getValue());
             }
 
             FilmProcessType type = FilmProcessType.ADD;
             kafkaProducer(film, type);
-            return new SuccessResult(SuccessMessages.dataAdded);
+            return new SuccessResult(SuccessMessages.dataAdded, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorResult(e.toString());
+            return new ErrorResult(e.toString(), statusCode.getValue());
         }
     }
 
     @Override
     public Result update(Long id, Film film) {
+        CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
         try {
             var checkFields = !FilmCheckHelper.isFillFields(film);
-            var checkFilm = this.filmDao.findByName(film.getName()).size() != 0;
-            //Ama bu objecti hariç tutmamız lazım.bunun idsi ile geleni kıyasla aynıysa
-            //sorun yok
+            var getFilm = this.filmDao.findByName(film.getName());
+            var checkFilm = getFilm.get(0).getId() == film.getId();
+            var checkIsEmpty = getFilm.size() <= 1;
 
             if (checkFields || checkFilm) {
                 String errorMessage = "";
-                CustomStatusCodes statusCode = CustomStatusCodes.INITIAL_CODE;
+
                 if (checkFields) {
                     errorMessage = ErrorMessages.allFieldsRequired;
                     statusCode = CustomStatusCodes.ALL_FIELDS_REQUIRED;
@@ -106,15 +109,19 @@ public class FilmManager implements FilmService {
                     errorMessage = ErrorMessages.objectAlreadyExist;
                     statusCode = CustomStatusCodes.OBJECT_ALREADY_EXIST;
                 }
-                return new ErrorResult(errorMessage, statusCode.toString());
+//                if(isEmptyFilm){
+//                    errorMessage=ErrorMessages.objectNotFoundByName;
+//                    statusCode = CustomStatusCodes.OBJECT_NOT_FOUND;
+//                }
+                return new ErrorResult(errorMessage, statusCode.getValue());
             }
 
             FilmProcessType type = FilmProcessType.UPDATE;
             film.setId(id);
             kafkaProducer(film, type);
-            return new SuccessResult(SuccessMessages.dataUpdated);
+            return new SuccessResult(SuccessMessages.dataUpdated, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorResult(e.toString());
+            return new ErrorResult(e.toString(), statusCode.getValue());
         }
     }
 
@@ -124,32 +131,65 @@ public class FilmManager implements FilmService {
             var checkFilm = this.filmDao.findById(id).get().getId() != null; //bu hatayı tetikliyor
             FilmProcessType type = FilmProcessType.DELETE;
             kafkaProducer(id, type);
-            return new SuccessResult(SuccessMessages.dataDeleted);
+            return new SuccessResult(SuccessMessages.dataDeleted, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorResult(e.toString());
+            return new ErrorResult(e.toString(), CustomStatusCodes.GENERAL_CATCH_ERROR.getValue());
         }
     }
 
-//    TODO: Ayarları buraya çekelim
+    //    TODO: Ayarları buraya çekelim
     @Override
     public Result setActive(Long id) {
+        CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
+
         try {
+            var getFilm = this.filmDao.findById(id).get();
+            var checkIsPassive = getFilm.isActive() == true;
+            var checkIsDeleted = getFilm.getDeleted() != null;
+            if (checkIsPassive || checkIsDeleted) {
+                String errorMessage = "";
+                if (checkIsPassive) {
+                    errorMessage = ErrorMessages.objectHasSameValue;
+                    statusCode = CustomStatusCodes.OBJECT_HAS_SAME_VALUE;
+                }
+                if (checkIsDeleted) {
+                    errorMessage = ErrorMessages.objectNotFoundById;
+                    statusCode = CustomStatusCodes.OBJECT_NOT_FOUND;
+                }
+                return new ErrorResult(errorMessage, statusCode.getValue());
+            }
             FilmProcessType type = FilmProcessType.SET_ACTIVE;
             kafkaProducer(id, type);
-            return new SuccessResult(SuccessMessages.dataUpdated);
+            return new SuccessResult(SuccessMessages.dataUpdated, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorResult(e.toString());
+            return new ErrorResult(e.toString(), statusCode.getValue());
         }
     }
 
     @Override
     public Result setPassive(Long id) {
+        CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
         try {
+            var getFilm = this.filmDao.findById(id).get();
+            var checkIsPassive = getFilm.isActive() == false;
+            var checkIsDeleted = getFilm.getDeleted() != null;
+            if (checkIsPassive || checkIsDeleted) {
+                String errorMessage = "";
+                if (checkIsPassive) {
+                    errorMessage = ErrorMessages.objectHasSameValue;
+                    statusCode = CustomStatusCodes.OBJECT_HAS_SAME_VALUE;
+                }
+                if (checkIsDeleted) {
+                    errorMessage = ErrorMessages.objectNotFoundById;
+                    statusCode = CustomStatusCodes.OBJECT_NOT_FOUND;
+                }
+                return new ErrorResult(errorMessage, statusCode.getValue());
+            }
             FilmProcessType type = FilmProcessType.SET_PASSIVE;
             kafkaProducer(id, type);
-            return new SuccessResult(SuccessMessages.dataUpdated);
+            return new SuccessResult(SuccessMessages.dataUpdated, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorResult(e.toString());
+            return new ErrorResult(e.toString(), statusCode.getValue());
         }
     }
 

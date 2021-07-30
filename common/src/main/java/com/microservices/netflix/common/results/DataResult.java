@@ -14,6 +14,11 @@ public class DataResult<T> extends Result {
         this.data = data;
     }
 
+    public DataResult(T data, boolean success, String message,int customStatusCodes) {
+        super(success, message,customStatusCodes);
+        this.data = data;
+    }
+
     public T getData() {
         return this.data;
     }

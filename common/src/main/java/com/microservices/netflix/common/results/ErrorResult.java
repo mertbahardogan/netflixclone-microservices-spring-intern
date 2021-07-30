@@ -9,7 +9,7 @@ public class ErrorResult extends Result {
         super(false, message);
     }
 
-    public ErrorResult(String message,String customStatusCodes){
+    public ErrorResult(String message,int customStatusCodes){
         super(false, message,customStatusCodes);
     }
 }
