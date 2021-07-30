@@ -6,6 +6,7 @@ import com.microservices.netflix.common.entities.FavouriteFilm;
 import com.microservices.netflix.common.messages.user.favourite.FavouriteProcessMessage;
 import com.microservices.netflix.common.messages.user.favourite.FavouriteProcessType;
 import com.microservices.netflix.common.results.*;
+import com.microservices.netflix.common.strings.ErrorMessages;
 import com.microservices.netflix.common.strings.SuccessMessages;
 import com.microservices.netflix.controller.business.abstracts.FavouriteFilmService;
 import com.microservices.netflix.controller.dataAccess.FavouriteFilmDao;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
@@ -23,14 +25,11 @@ import java.util.List;
 
 @Service
 public class FavouriteFilmManager implements FavouriteFilmService {
-
+    @Value("${ms.topic.favourite}")
+    private String topic;
     private static final Logger logger = LoggerFactory.getLogger(UserManager.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final FavouriteFilmDao favouriteFilmDao;
-
-
-    @Value("${ms.topic.favourite}")
-    private String topic;
 
     @Autowired
     public FavouriteFilmManager(KafkaTemplate<String, String> kafkaTemplate, FavouriteFilmDao favouriteFilmDao) {
@@ -38,43 +37,63 @@ public class FavouriteFilmManager implements FavouriteFilmService {
         this.favouriteFilmDao = favouriteFilmDao;
     }
 
+    CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
+
     @Override
-    public Result addToFav(FavouriteFilm favouriteFilm){
+    public Result addToFav(FavouriteFilm favouriteFilm) {
         try {
-            FavouriteProcessType type = FavouriteProcessType.ADD_TO_FAV;
-            kafkaProducer(favouriteFilm,type);
-            return new SuccessResult(SuccessMessages.dataAdded);
+            if (this.favouriteFilmDao.findByUserIdAndFilm(favouriteFilm.getUserId(), favouriteFilm.getFilm().getId()).isPresent()) {
+                var getFilm = this.favouriteFilmDao.findByUserIdAndFilm(favouriteFilm.getUserId(), favouriteFilm.getFilm().getId()).get();
+                if (getFilm.getFilm().getId() != null || getFilm.getUserId() != 0) {
+                    String errorMessage = ErrorMessages.objectAlreadyExist;
+                    statusCode = CustomStatusCodes.OBJECT_ALREADY_EXIST;
+                    return new ErrorResult(errorMessage, statusCode.getValue());
+                }
+            } else {
+                FavouriteProcessType type = FavouriteProcessType.ADD_TO_FAV;
+                kafkaProducer(favouriteFilm, type);
+            }
+
+            return new SuccessResult(SuccessMessages.dataAdded, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorResult(e.toString());
+            return new ErrorResult(e.toString(), statusCode.getValue());
         }
     }
 
     @Override
-    public Result deleteFromFav(int id)  {
+    public Result deleteFromFav(Long id) {
         try {
+            var getFavFilm = this.favouriteFilmDao.findById(id).get();
+            var checkFav = getFavFilm.getFilm().getId() == null || getFavFilm.getUserId() == 0;
+
+            if (checkFav) {
+                String errorMessage = ErrorMessages.objectNotFoundById;
+                statusCode = CustomStatusCodes.OBJECT_NOT_FOUND;
+                return new ErrorResult(errorMessage, statusCode.getValue());
+            }
             FavouriteProcessType type = FavouriteProcessType.DELETE_FROM_FAV;
-            kafkaProducer(id,type);
-            return new SuccessResult(SuccessMessages.dataDeleted);
+            kafkaProducer(id, type);
+            return new SuccessResult(SuccessMessages.dataDeleted, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorResult(e.toString());
+            return new ErrorResult(e.toString(), statusCode.getValue());
         }
     }
 
     @Override
     public DataResult<List<FavouriteFilm>> findFavouriteFilms() {
         try {
-            return new SuccessDataResult<>(this.favouriteFilmDao.findAll(), SuccessMessages.allDataListed);
+            return new SuccessDataResult<>(this.favouriteFilmDao.findAll(), SuccessMessages.allDataListed, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorDataResult<>(e.toString());
+            return new ErrorDataResult<>(e.toString(), statusCode.getValue());
         }
     }
 
     @Override
     public DataResult<List<FavouriteFilm>> findFavouriteFilmsByIsActiveAndUserId(int userId) {
         try {
-            return new SuccessDataResult<>(this.favouriteFilmDao.findByIsActiveAndUserId(userId), SuccessMessages.allDataListed);
+            return new SuccessDataResult<>(this.favouriteFilmDao.findByIsActiveAndUserId(userId), SuccessMessages.allDataListed, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorDataResult<>(e.toString());
+            return new ErrorDataResult<>(e.toString(), statusCode.getValue());
         }
     }
 

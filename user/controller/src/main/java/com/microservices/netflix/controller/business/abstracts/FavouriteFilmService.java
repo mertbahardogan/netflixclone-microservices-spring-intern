@@ -12,7 +12,7 @@ import java.util.List;
 public interface FavouriteFilmService {
     Result addToFav(FavouriteFilm favouriteFilm) throws IOException;
 
-    Result deleteFromFav(int id) throws IOException;
+    Result deleteFromFav(Long id) throws IOException;
 
     DataResult<List<FavouriteFilm>> findFavouriteFilms();
 

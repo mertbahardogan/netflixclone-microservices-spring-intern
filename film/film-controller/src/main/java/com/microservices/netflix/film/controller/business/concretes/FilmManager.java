@@ -41,6 +41,9 @@ public class FilmManager implements FilmService {
         this.filmDao = filmDao;
     }
 
+    CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
+
+
     @Override
     public DataResult<List<Film>> findAll() {
         try {
@@ -62,7 +65,6 @@ public class FilmManager implements FilmService {
 
     @Override
     public Result add(Film film) {
-        CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
 
         try {
             var getFilm = this.filmDao.findByName(film.getName());
@@ -91,7 +93,6 @@ public class FilmManager implements FilmService {
 
     @Override
     public Result update(Long id, Film film) {
-        CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
         try {
             var checkFields = !FilmCheckHelper.isFillFields(film);
             var getFilm = this.filmDao.findByName(film.getName());
@@ -128,20 +129,18 @@ public class FilmManager implements FilmService {
     @Override
     public Result delete(Long id) {
         try {
-            var checkFilm = this.filmDao.findById(id).get().getId() != null; //bu hatayı tetikliyor
+            var checkFilm = this.filmDao.findById(id).get().getId() != null; //Hata tetiklemesi için gerekli.
             FilmProcessType type = FilmProcessType.DELETE;
             kafkaProducer(id, type);
             return new SuccessResult(SuccessMessages.dataDeleted, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorResult(e.toString(), CustomStatusCodes.GENERAL_CATCH_ERROR.getValue());
+            return new ErrorResult(e.toString(), statusCode.getValue());
         }
     }
 
     //    TODO: Ayarları buraya çekelim
     @Override
     public Result setActive(Long id) {
-        CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
-
         try {
             var getFilm = this.filmDao.findById(id).get();
             var checkIsPassive = getFilm.isActive() == true;
@@ -168,7 +167,6 @@ public class FilmManager implements FilmService {
 
     @Override
     public Result setPassive(Long id) {
-        CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
         try {
             var getFilm = this.filmDao.findById(id).get();
             var checkIsPassive = getFilm.isActive() == false;

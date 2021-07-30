@@ -39,7 +39,7 @@ public class FavouriteFilmsController{
     }
 
     @DeleteMapping("deleteFromFav")
-    public Result deleteFromFav(@RequestParam int id) throws IOException {
+    public Result deleteFromFav(@RequestParam Long id) throws IOException {
         return this.favouriteFilmService.deleteFromFav(id);
     }
 }
