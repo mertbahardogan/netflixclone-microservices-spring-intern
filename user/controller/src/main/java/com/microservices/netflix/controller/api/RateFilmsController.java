@@ -37,7 +37,7 @@ public class RateFilmsController {
     }
 
     @GetMapping("findRatedFilmsByIsActiveAndUserId")
-    public DataResult<List<RateFilm>> findRatedFilmsByIsActiveAndUserId(@RequestParam int userId) throws IOException {
+    public DataResult<List<RateFilm>> findRatedFilmsByIsActiveAndUserId(@RequestParam int userId){
         return this.rateFilmService.findRatedFilmsByIsActiveAndUserId(userId);
     }
 }

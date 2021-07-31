@@ -49,11 +49,11 @@ public class FavouriteFilmManager implements FavouriteFilmService {
                     statusCode = CustomStatusCodes.OBJECT_ALREADY_EXIST;
                     return new ErrorResult(errorMessage, statusCode.getValue());
                 }
-            } else {
+            }
+            else {
                 FavouriteProcessType type = FavouriteProcessType.ADD_TO_FAV;
                 kafkaProducer(favouriteFilm, type);
             }
-
             return new SuccessResult(SuccessMessages.dataAdded, HttpStatus.OK.value());
         } catch (Exception e) {
             return new ErrorResult(e.toString(), statusCode.getValue());
@@ -84,7 +84,7 @@ public class FavouriteFilmManager implements FavouriteFilmService {
         try {
             return new SuccessDataResult<>(this.favouriteFilmDao.findAll(), SuccessMessages.allDataListed, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorDataResult<>(e.toString(), statusCode.getValue());
+            return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
         }
     }
 
@@ -93,7 +93,7 @@ public class FavouriteFilmManager implements FavouriteFilmService {
         try {
             return new SuccessDataResult<>(this.favouriteFilmDao.findByIsActiveAndUserId(userId), SuccessMessages.allDataListed, HttpStatus.OK.value());
         } catch (Exception e) {
-            return new ErrorDataResult<>(e.toString(), statusCode.getValue());
+            return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
         }
     }
 

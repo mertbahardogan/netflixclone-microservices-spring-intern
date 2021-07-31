@@ -17,12 +17,4 @@ public enum CustomStatusCodes {
     public int getValue(){
         return value;
     }
-
-//    @Override
-//    public String toString() {
-//        return value;
-//    }
 }
-
-//Dönüş tipi doğru mu?
-//Kontrolleri controllerda yapıyorum doğru mu?

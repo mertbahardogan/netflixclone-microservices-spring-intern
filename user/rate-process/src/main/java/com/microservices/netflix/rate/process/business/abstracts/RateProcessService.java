@@ -9,5 +9,5 @@ public interface RateProcessService {
 
     void delete(Long id);
 
-    void update(Long id, RateFilm rateFilm);
+    void update(RateFilm rateFilm);
 }

@@ -138,7 +138,6 @@ public class FilmManager implements FilmService {
         }
     }
 
-    //    TODO: Ayarları buraya çekelim
     @Override
     public Result setActive(Long id) {
         try {

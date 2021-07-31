@@ -20,7 +20,7 @@ public class UserManager implements UserService {
         this.userDao = userDao;
     }
 
-    CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
+    CustomStatusCodes statusCode = CustomStatusCodes.DATA_NOT_LISTED;
 
     @Override
     public DataResult<List<Film>> findAllByIsActive() {
