@@ -22,4 +22,7 @@ public class WatchContent extends UserProcess{
     @NotNull
     @Column(name = "remain_time")
     private String remainTime;
+
+    @Column(name="is_finished")
+    private boolean isFinished;
 }

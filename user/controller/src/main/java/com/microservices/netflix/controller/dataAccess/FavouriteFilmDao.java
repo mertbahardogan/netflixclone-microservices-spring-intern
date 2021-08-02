@@ -16,6 +16,6 @@ public interface FavouriteFilmDao extends JpaRepository<FavouriteFilm,Long> {
     @Query("FROM FavouriteFilm WHERE userId=:userId and film.id=:filmId")
     Optional<FavouriteFilm> findByUserIdAndFilm(int userId,Long filmId);
 
-    @Query("FROM FavouriteFilm f JOIN UserProcess u ON f.id=u.id JOIN Film fs ON u.film.id=fs.id AND u.film.isActive=true")
+    @Query("FROM FavouriteFilm f JOIN UserProcess u ON f.id=u.id JOIN Film fs ON u.film.id=fs.id AND u.film.isActive=true AND u.userId=:userId")
     List<FavouriteFilm> findByIsActiveAndUserId(int userId);
 }

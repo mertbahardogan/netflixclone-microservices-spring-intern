@@ -7,7 +7,6 @@ import com.microservices.netflix.controller.business.abstracts.FavouriteFilmServ
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -34,12 +33,12 @@ public class FavouriteFilmsController{
     }
 
     @PostMapping("addToFav")
-    public Result addToFav(@RequestBody FavouriteFilm favouriteFilm) throws IOException {
+    public Result addToFav(@RequestBody FavouriteFilm favouriteFilm) {
         return this.favouriteFilmService.addToFav(favouriteFilm);
     }
 
     @DeleteMapping("deleteFromFav")
-    public Result deleteFromFav(@RequestParam Long id) throws IOException {
+    public Result deleteFromFav(@RequestParam Long id) {
         return this.favouriteFilmService.deleteFromFav(id);
     }
 }

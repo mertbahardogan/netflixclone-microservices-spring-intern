@@ -5,14 +5,13 @@ import com.microservices.netflix.common.results.DataResult;
 import com.microservices.netflix.common.results.Result;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
 public interface FavouriteFilmService {
-    Result addToFav(FavouriteFilm favouriteFilm) throws IOException;
+    Result addToFav(FavouriteFilm favouriteFilm);
 
-    Result deleteFromFav(Long id) throws IOException;
+    Result deleteFromFav(Long id) ;
 
     DataResult<List<FavouriteFilm>> findFavouriteFilms();
 

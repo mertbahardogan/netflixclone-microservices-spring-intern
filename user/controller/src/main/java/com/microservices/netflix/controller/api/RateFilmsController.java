@@ -7,7 +7,6 @@ import com.microservices.netflix.controller.business.abstracts.RateFilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -22,17 +21,17 @@ public class RateFilmsController {
     }
 
     @PostMapping("add")
-    public Result add(@RequestBody RateFilm rateFilm) throws IOException {
+    public Result add(@RequestBody RateFilm rateFilm){
         return this.rateFilmService.add(rateFilm);
     }
 
     @PutMapping("update")
-    public Result update(@RequestParam Long id,@RequestBody RateFilm rateFilm) throws IOException {
+    public Result update(@RequestParam Long id,@RequestBody RateFilm rateFilm)  {
         return this.rateFilmService.update(id,rateFilm);
     }
 
     @DeleteMapping("delete")
-    public Result add(@RequestParam Long id) throws IOException {
+    public Result add(@RequestParam Long id) {
         return this.rateFilmService.delete(id);
     }
 

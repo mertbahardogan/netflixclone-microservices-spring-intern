@@ -2,15 +2,14 @@ package com.microservices.netflix.controller.business.concretes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microservices.netflix.common.entities.RateFilm;
-import com.microservices.netflix.common.messages.user.favourite.FavouriteProcessType;
-import com.microservices.netflix.common.messages.user.rate.RateProcessMessage;
-import com.microservices.netflix.common.messages.user.rate.RateProcessType;
+import com.microservices.netflix.common.entities.WatchContent;
+import com.microservices.netflix.common.messages.user.watched.content.WatchedContentProcessMessage;
+import com.microservices.netflix.common.messages.user.watched.content.WatchedContentProcessType;
 import com.microservices.netflix.common.results.*;
 import com.microservices.netflix.common.strings.ErrorMessages;
 import com.microservices.netflix.common.strings.SuccessMessages;
-import com.microservices.netflix.controller.business.abstracts.RateFilmService;
-import com.microservices.netflix.controller.dataAccess.RateFilmDao;
+import com.microservices.netflix.controller.business.abstracts.WatchedFilmService;
+import com.microservices.netflix.controller.dataAccess.WatchedFilmDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,95 +23,82 @@ import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import java.util.List;
 
-
 @Service
-public class RateFilmManager implements RateFilmService {
-    @Value("${ms.topic.rate}")
+public class WatchedFilmManager implements WatchedFilmService {
+    @Value("${ms.topic.content}")
     private String topic;
     private static final Logger logger = LoggerFactory.getLogger(UserManager.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
-    private final RateFilmDao rateFilmDao;
+    private final WatchedFilmDao watchedFilmDao;
 
     @Autowired
-    public RateFilmManager(KafkaTemplate<String, String> kafkaTemplate, RateFilmDao rateFilmDao) {
+    public WatchedFilmManager(KafkaTemplate<String, String> kafkaTemplate, WatchedFilmDao watchedFilmDao) {
         this.kafkaTemplate = kafkaTemplate;
-        this.rateFilmDao = rateFilmDao;
+        this.watchedFilmDao = watchedFilmDao;
     }
 
     CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
 
     @Override
-    public Result add(RateFilm rateFilm) {
+    public Result add(WatchContent watchContent) {
         try {
-            if (this.rateFilmDao.findByUserIdAndFilm(rateFilm.getUserId(), rateFilm.getFilm().getId()).isPresent()) {
-                var getFilm = this.rateFilmDao.findByUserIdAndFilm(rateFilm.getUserId(), rateFilm.getFilm().getId()).get();
+            if (this.watchedFilmDao.findByUserIdAndFilm(watchContent.getUserId(), watchContent.getFilm().getId()).isPresent()) {
+                var getFilm = this.watchedFilmDao.findByUserIdAndFilm(watchContent.getUserId(), watchContent.getFilm().getId()).get();
                 if (getFilm.getFilm().getId() != null || getFilm.getUserId() != 0) {
                     String errorMessage = ErrorMessages.objectAlreadyExist;
                     statusCode = CustomStatusCodes.OBJECT_ALREADY_EXIST;
                     return new ErrorResult(errorMessage, statusCode.getValue());
                 }
             } else {
-                RateProcessType type = RateProcessType.ADD;
-                kafkaProducer(rateFilm, type);
+                WatchedContentProcessType type = WatchedContentProcessType.ADD;
+                kafkaProducer(watchContent, type);
             }
             return new SuccessResult(SuccessMessages.dataAdded, HttpStatus.OK.value());
+
         } catch (Exception e) {
             return new ErrorResult(e.toString(), statusCode.getValue());
         }
     }
 
     @Override
-    public Result update(Long id, RateFilm rateFilm) {
+    public Result update(Long id, WatchContent watchContent) {
         try {
-            if (this.rateFilmDao.findById(id).isPresent()) {
-                RateProcessType type = RateProcessType.UPDATE;
-                rateFilm.setId(id);
-                kafkaProducer(rateFilm, type);
+            if (this.watchedFilmDao.findById(id).isPresent()) {
+                WatchedContentProcessType type = WatchedContentProcessType.UPDATE;
+                watchContent.setId(id);
+                kafkaProducer(watchContent, type);
                 return new SuccessResult(SuccessMessages.dataUpdated, HttpStatus.OK.value());
             } else {
                 String errorMessage = ErrorMessages.objectNotFoundById;
                 statusCode = CustomStatusCodes.OBJECT_NOT_FOUND;
                 return new ErrorResult(errorMessage, statusCode.getValue());
             }
-
         } catch (Exception e) {
             return new ErrorResult(e.toString(), statusCode.getValue());
         }
     }
 
     @Override
-    public Result delete(Long id) {
+    public DataResult<List<WatchContent>> findByIsActiveAndIsFinishedAndUserId(int userId) {
         try {
-            var getFavFilm = this.rateFilmDao.findById(id).get();
-            var checkFav = getFavFilm.getFilm().getId() == null || getFavFilm.getUserId() == 0;
-
-            if (checkFav) {
-                String errorMessage = ErrorMessages.objectNotFoundById;
-                statusCode = CustomStatusCodes.OBJECT_NOT_FOUND;
-                return new ErrorResult(errorMessage, statusCode.getValue());
-            }
-            RateProcessType type = RateProcessType.DELETE;
-            kafkaProducer(id, type);
-            return new SuccessResult(SuccessMessages.dataDeleted, HttpStatus.OK.value());
-        } catch (Exception e) {
-            return new ErrorResult(e.toString(), statusCode.getValue());
-        }
-    }
-
-    @Override
-    public DataResult<List<RateFilm>> findRatedFilmsByIsActiveAndUserId(int userId) {
-        try {
-            return new SuccessDataResult<>(this.rateFilmDao.findByIsActiveAndUserId(userId), SuccessMessages.allDataListed, HttpStatus.OK.value());
+            return new SuccessDataResult<>(this.watchedFilmDao.findByIsActiveAndIsFinishedAndUserId(userId), SuccessMessages.allDataListed, HttpStatus.OK.value());
         } catch (Exception e) {
             return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
         }
     }
 
+    @Override
+    public DataResult<List<WatchContent>> findByIsActiveAndIsNotFinishedAndUserId(int userId) {
+        try {
+            return new SuccessDataResult<>(this.watchedFilmDao.findByIsActiveAndIsNotFinishedAndUserId(userId), SuccessMessages.allDataListed, HttpStatus.OK.value());
+        } catch (Exception e) {
+            return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
+        }
+    }
 
-    public void kafkaProducer(Object content, RateProcessType type) throws JsonProcessingException {
+    public void kafkaProducer(Object content, WatchedContentProcessType type) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
-
-        RateProcessMessage<Object> processMessage = new RateProcessMessage<>(
+        WatchedContentProcessMessage<Object> processMessage = new WatchedContentProcessMessage<>(
                 type, content
         );
 
