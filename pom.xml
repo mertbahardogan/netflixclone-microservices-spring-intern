@@ -7,6 +7,7 @@
         <module>film</module>
         <module>user</module>
         <module>config-server</module>
+        <module>eureka-server</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -39,6 +40,8 @@
         <spring-cloud-dependencies.version>2020.0.3</spring-cloud-dependencies.version>
 
         <logstash.version>6.5</logstash.version>
+
+        <eureka-server.version>3.0.3</eureka-server.version>
     </properties>
 
     <dependencyManagement>
@@ -131,6 +134,13 @@
                 <artifactId>logstash-logback-encoder</artifactId>
                 <version>${logstash.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+                <version>${eureka-server.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

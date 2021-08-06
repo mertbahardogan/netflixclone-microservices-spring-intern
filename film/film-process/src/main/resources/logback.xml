@@ -8,11 +8,11 @@
         <remoteHost>localhost</remoteHost>
         <port>5000</port>
         <encoder class="net.logstash.logback.encoder.LogstashEncoder">
-            <customFields>{"app_name":"testFilmController", "app_port": "YourPort"}</customFields>
+            <customFields>{"app_name":"testFilmProcess", "app_port": "YourPort"}</customFields>
         </encoder>
     </appender>
     <!--    back to TRACE or DEBUG  -->
-    <root level="DEBUG">
+    <root level="TRACE">
         <appender-ref ref="logstash"/>
     </root>
 </configuration>

@@ -3,15 +3,18 @@ package com.microservices.netflix.film.process.business.concretes;
 import com.microservices.netflix.common.entities.Film;
 import com.microservices.netflix.film.process.business.abstracts.FilmProcessService;
 import com.microservices.netflix.film.process.dataAccess.FilmProcessDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.*;
-import java.util.Date;
 
 @Service
 public class FilmProcessManager implements FilmProcessService {
+
     private final FilmProcessDao processDao;
+    Logger logger = LoggerFactory.getLogger(FilmProcessManager.class);
 
     @Autowired
     public FilmProcessManager(FilmProcessDao processDao) {
@@ -22,6 +25,7 @@ public class FilmProcessManager implements FilmProcessService {
     public void add(Film film) {
         OffsetDateTime offsetDTA = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.of("+03:00"));
         film.setCreated(offsetDTA);
+        logger.info("New Film Added!");
         this.processDao.save(film);
     }
 
@@ -38,6 +42,7 @@ public class FilmProcessManager implements FilmProcessService {
 
         OffsetDateTime offsetDTU = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.of("+03:00"));
         valueUpdate.setEdited(offsetDTU);
+        logger.info("Film Updated!");
         this.processDao.save(valueUpdate);
     }
 
@@ -47,6 +52,7 @@ public class FilmProcessManager implements FilmProcessService {
         valueDelete.setActive(false);
         OffsetDateTime offsetDTD = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.of("+03:00"));
         valueDelete.setDeleted(offsetDTD);
+        logger.info("Film Deleted!");
         this.processDao.save(valueDelete);
     }
 
@@ -54,6 +60,7 @@ public class FilmProcessManager implements FilmProcessService {
     public void settingActive(Long id) {
         Film value = this.processDao.findById(id).get();
         value.setActive(true);
+        logger.info("Film Actived!");
         this.processDao.save(value);
     }
 
@@ -61,6 +68,7 @@ public class FilmProcessManager implements FilmProcessService {
     public void settingPassive(Long id) {
         Film value = this.processDao.findById(id).get();
         value.setActive(false);
+        logger.info("Film Passived!");
         this.processDao.save(value);
     }
 }
