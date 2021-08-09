@@ -25,4 +25,6 @@ public interface FilmService {
     Result setActive(Long id) ;
 
     Result setPassive(Long id) ;
+
+    DataResult<List<Film>> findActiveFilmsFromUserService();
 }

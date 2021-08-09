@@ -8,6 +8,7 @@
         <module>user</module>
         <module>config-server</module>
         <module>eureka-server</module>
+        <module>common-service</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -139,6 +140,19 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
                 <version>${eureka-server.version}</version>
+            </dependency>
+
+            <!-- TODO: Version yukarı çekilecek. -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-feign</artifactId>
+                <version>1.4.7.RELEASE</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.microservices-netflix</groupId>
+                <artifactId>common-service</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
         </dependencies>

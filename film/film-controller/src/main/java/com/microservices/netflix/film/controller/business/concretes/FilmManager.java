@@ -8,11 +8,13 @@ import com.microservices.netflix.common.entities.Film;
 import com.microservices.netflix.common.messages.film.FilmProcessMessage;
 import com.microservices.netflix.common.messages.film.FilmProcessType;
 import com.microservices.netflix.common.results.*;
+import com.microservices.netflix.common.service.services.UserControllerClient;
 import com.microservices.netflix.common.strings.ErrorMessages;
 import com.microservices.netflix.common.strings.SuccessMessages;
 import com.microservices.netflix.film.controller.business.abstracts.FilmService;
 import com.microservices.netflix.film.controller.business.helpers.FilmCheckHelper;
 import com.microservices.netflix.film.controller.dataAccess.FilmDao;
+import io.swagger.models.Xml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
+import springfox.documentation.spring.web.json.Json;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,17 +34,27 @@ import java.util.Optional;
 public class FilmManager implements FilmService {
     @Value("${ms.topic.process}")
     private String topic;
+    CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
     private static final Logger logger = LoggerFactory.getLogger(FilmManager.class);
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final FilmDao filmDao;
 
+    private final UserControllerClient userControllerClient;
+
+
     @Autowired
-    public FilmManager(KafkaTemplate<String, String> kafkaTemplate, FilmDao filmDao) {
+    public FilmManager(KafkaTemplate<String, String> kafkaTemplate, FilmDao filmDao, UserControllerClient userControllerClient) {
         this.kafkaTemplate = kafkaTemplate;
         this.filmDao = filmDao;
+        this.userControllerClient = userControllerClient;
     }
 
-    CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
+
+//    @Autowired
+//    public FilmManager(KafkaTemplate<String, String> kafkaTemplate, FilmDao filmDao) {
+//        this.kafkaTemplate = kafkaTemplate;
+//        this.filmDao = filmDao;
+//    }
 
 
     @Override
@@ -187,6 +200,22 @@ public class FilmManager implements FilmService {
             return new SuccessResult(SuccessMessages.dataUpdated, HttpStatus.OK.value());
         } catch (Exception e) {
             return new ErrorResult(e.toString(), statusCode.getValue());
+        }
+    }
+
+    @Override
+    public DataResult<List<Film>> findActiveFilmsFromUserService() {
+        try{
+            SuccessDataResult<List<Film>> listDataResult = this.userControllerClient.findAllByIsActive();
+
+            System.out.println(listDataResult.getData().isEmpty()); //ArrayList
+//            if (listDataResult.getCustomStatusCode() == 200) {
+                return new SuccessDataResult<>(listDataResult.getData(), SuccessMessages.allDataListed, HttpStatus.OK.value());
+//            } else {
+//                return new ErrorDataResult<>("Data User'dan getirilirken ELSE'e düştü.", CustomStatusCodes.DATA_NOT_LISTED.getValue());
+//            }
+        }catch (Exception e){
+            return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
         }
     }
 

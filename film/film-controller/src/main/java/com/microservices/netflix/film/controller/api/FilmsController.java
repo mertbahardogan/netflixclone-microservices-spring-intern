@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/films/")
+@RequestMapping("api/films/")
 @CrossOrigin
 public class FilmsController {
 
@@ -56,5 +56,10 @@ public class FilmsController {
     @PatchMapping("setPassive")
     public Result setPassive(@RequestParam Long id)  {
         return this.filmService.setPassive(id);
+    }
+
+    @GetMapping("findActiveFilmsFromUserService")
+    public DataResult<List<Film>> findActiveFilmsFromUserService() {
+        return this.filmService.findActiveFilmsFromUserService();
     }
 }
