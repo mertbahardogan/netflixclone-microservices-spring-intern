@@ -9,6 +9,7 @@
         <module>config-server</module>
         <module>eureka-server</module>
         <module>common-service</module>
+        <module>zipkin-server</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -16,6 +17,20 @@
         <version>2.5.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
+    <developers>
+        <developer>
+            <id>mertb</id>
+            <name>Mert BAHARDOGAN</name>
+            <email>mbahardogam@hotmail.com</email>
+            <roles>
+                <role>
+                    Intern Computer Engineer
+                </role>
+            </roles>
+        </developer>
+    </developers>
+
     <groupId>com.microservices-netflix</groupId>
     <artifactId>microservices-netflix</artifactId>
     <version>0.0.1-SNAPSHOT</version>
@@ -43,10 +58,14 @@
         <logstash.version>6.5</logstash.version>
 
         <eureka-server.version>3.0.3</eureka-server.version>
+        <feign.version>1.4.7.RELEASE</feign.version>
+
+        <zipkin.version>2.12.9</zipkin.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -141,18 +160,22 @@
                 <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
                 <version>${eureka-server.version}</version>
             </dependency>
-
-            <!-- TODO: Version yukarı çekilecek. -->
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-feign</artifactId>
-                <version>1.4.7.RELEASE</version>
+                <version>${feign.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>com.microservices-netflix</groupId>
                 <artifactId>common-service</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-zipkin</artifactId>
+                <version>2.2.8.RELEASE</version>
             </dependency>
 
         </dependencies>
