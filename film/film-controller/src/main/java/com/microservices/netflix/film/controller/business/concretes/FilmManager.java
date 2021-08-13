@@ -36,6 +36,7 @@ public class FilmManager implements FilmService {
     private String topic;
     CustomStatusCodes statusCode = CustomStatusCodes.GENERAL_CATCH_ERROR;
     private static final Logger logger = LoggerFactory.getLogger(FilmManager.class);
+
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final FilmDao filmDao;
 
@@ -48,14 +49,6 @@ public class FilmManager implements FilmService {
         this.filmDao = filmDao;
         this.userControllerClient = userControllerClient;
     }
-
-
-//    @Autowired
-//    public FilmManager(KafkaTemplate<String, String> kafkaTemplate, FilmDao filmDao) {
-//        this.kafkaTemplate = kafkaTemplate;
-//        this.filmDao = filmDao;
-//    }
-
 
     @Override
     public DataResult<List<Film>> findAll() {

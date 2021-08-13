@@ -10,6 +10,8 @@
         <module>eureka-server</module>
         <module>common-service</module>
         <module>zipkin-server</module>
+        <module>gateway-server</module>
+        <module>hystrix-dashboard</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -41,15 +43,19 @@
     <properties>
         <java.version>11</java.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <spring-boot.version>2.5.2</spring-boot.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <lombok.version>1.18.20</lombok.version>
+
+        <spring-boot.version>2.5.2</spring-boot.version>
         <spring-boot-starter-web.version>2.5.2</spring-boot-starter-web.version>
+        <spring-boot-starter-data-jpa.version>2.5.2</spring-boot-starter-data-jpa.version>
+
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
+
         <spring-kafka.version>2.7.3</spring-kafka.version>
+
         <postgresql.version>42.2.23</postgresql.version>
-        <spring-boot-starter-data-jpa.version>2.5.2</spring-boot-starter-data-jpa.version>
+        <lombok.version>1.18.20</lombok.version>
         <jackson-databind.version>2.12.4</jackson-databind.version>
 
         <spring-cloud.version>3.0.2</spring-cloud.version>
@@ -178,6 +184,37 @@
                 <version>2.2.8.RELEASE</version>
             </dependency>
 
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-gateway</artifactId>
+                <version>3.0.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
+                <version>2.2.9.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+                <version>3.0.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-actuator</artifactId>
+                <version>2.5.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
+                <version>2.2.9.RELEASE</version>
+            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.cloud</groupId>-->
+<!--                <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>-->
+<!--                <version>2.0.2</version>-->
+<!--            </dependency>-->
         </dependencies>
     </dependencyManagement>
 

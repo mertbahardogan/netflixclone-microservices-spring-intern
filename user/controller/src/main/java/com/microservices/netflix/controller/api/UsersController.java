@@ -13,7 +13,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/users/")
+//@RequestMapping("api/users/")
+@RequestMapping("controller/")
 @CrossOrigin
 public class UsersController {
     private UserService userService;

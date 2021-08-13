@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/films/")
+//@RequestMapping("api/films/")
+@RequestMapping("film-controller/")
 @CrossOrigin
 public class FilmsController {
 

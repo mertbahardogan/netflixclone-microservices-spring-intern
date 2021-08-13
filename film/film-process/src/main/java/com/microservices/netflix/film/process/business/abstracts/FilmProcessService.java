@@ -5,9 +5,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface FilmProcessService {
-    void add(Film film);
+    Film add(Film film);
 
-    void update(Long id,Film film);
+    Film update(Long id,Film film);
 
     void deleteById(Long id);
 
