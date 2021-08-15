@@ -6,14 +6,17 @@ import com.microservices.netflix.common.results.DataResult;
 import com.microservices.netflix.common.results.Result;
 import com.microservices.netflix.film.controller.business.abstracts.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-//@RequestMapping("api/films/")
-@RequestMapping("film-controller/")
+//Erişim seçenekleri:
+//localhost:54279/film-controller/api/findAll
+//localhost:8088/film-controller/api/findAll
+@RequestMapping("api/")
 @CrossOrigin
 public class FilmsController {
 
@@ -24,8 +27,13 @@ public class FilmsController {
         this.filmService = filmService;
     }
 
+    @Autowired
+    Environment environment;
+
+
     @GetMapping("findAll")
     public DataResult<List<Film>> findAll() {
+        System.out.println("Let's see SERVER PORT(load balancer): "+ environment.getProperty("local.server.port"));
         return this.filmService.findAll();
     }
 

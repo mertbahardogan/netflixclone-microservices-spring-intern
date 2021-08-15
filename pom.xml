@@ -11,7 +11,6 @@
         <module>common-service</module>
         <module>zipkin-server</module>
         <module>gateway-server</module>
-        <module>hystrix-dashboard</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -66,7 +65,7 @@
         <eureka-server.version>3.0.3</eureka-server.version>
         <feign.version>1.4.7.RELEASE</feign.version>
 
-        <zipkin.version>2.12.9</zipkin.version>
+        <zipkin.version>2.2.8.RELEASE</zipkin.version>
     </properties>
 
     <dependencyManagement>
@@ -181,40 +180,20 @@
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-zipkin</artifactId>
-                <version>2.2.8.RELEASE</version>
+                <version>${zipkin.version}</version>
             </dependency>
-
 
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-gateway</artifactId>
-                <version>3.0.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-netflix-hystrix</artifactId>
-                <version>2.2.9.RELEASE</version>
+                <version>${spring-cloud.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-                <version>3.0.3</version>
+                <version>${spring-cloud.version}</version>
             </dependency>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-actuator</artifactId>
-                <version>2.5.3</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-netflix-hystrix-dashboard</artifactId>
-                <version>2.2.9.RELEASE</version>
-            </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.springframework.cloud</groupId>-->
-<!--                <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>-->
-<!--                <version>2.0.2</version>-->
-<!--            </dependency>-->
+
         </dependencies>
     </dependencyManagement>
 
