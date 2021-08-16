@@ -1,0 +1,3 @@
+[submodule "config-server-repository"]
+	path = config-server-repository
+	url = https://github.com/mertbahardogan/spring-cloud-config-server-repository
