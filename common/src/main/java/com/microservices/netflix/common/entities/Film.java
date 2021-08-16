@@ -72,6 +72,6 @@ public class Film {
     @Column(name = "deleted")
     private OffsetDateTime deleted;
 
-    @OneToMany(mappedBy = "film")
+    @OneToMany(mappedBy = "film",fetch = FetchType.EAGER) //ve bağlantısına eklendi.
     private List<UserProcess> userProcesses;
 }

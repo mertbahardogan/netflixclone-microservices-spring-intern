@@ -24,19 +24,18 @@ public class FilmProcessManager implements FilmProcessService {
 
     @Override
     public Film add(Film film) {
-        Assert.notNull(film.getName(),"İsim alanı boş olamaz.");
+        Assert.notNull(film.getName(), "İsim alanı boş olamaz.");
         OffsetDateTime offsetDTA = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.of("+03:00"));
         film.setCreated(offsetDTA);
-        final Film filmDB=this.processDao.save(film);
+        final Film filmDB = this.processDao.save(film);
         film.setId(filmDB.getId());
-        logger.info("New Film Added!"+film.getId()+"!"+film.getName());
+        logger.info("New Film Added!" + film.getId() + "!" + film.getName());
         return film;
     }
 
     @Override
-    public Film update(Long id, Film film) {
-        Assert.notNull(film.getName(),"İsim alanı boş olamaz.");
-        Film valueUpdate = this.processDao.findById(id).get();
+    public Film update(Film film) {
+        Film valueUpdate = this.processDao.findById(film.getId()).get();
         valueUpdate.setName(film.getName());
         valueUpdate.setSummary(film.getSummary());
         valueUpdate.setCoverPhoto(film.getCoverPhoto());
@@ -48,34 +47,50 @@ public class FilmProcessManager implements FilmProcessService {
         OffsetDateTime offsetDTU = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.of("+03:00"));
         valueUpdate.setEdited(offsetDTU);
         this.processDao.save(valueUpdate);
-        valueUpdate.setId(id);
-        logger.info("Film Updated!"+valueUpdate.getId()+"!"+valueUpdate.getName());
-        return valueUpdate;
+        logger.info("Film Updated!" + valueUpdate.getId() + "!" + valueUpdate.getName());
+        return film;
     }
 
     @Override
-    public void deleteById(Long id) {
-        Film valueDelete = this.processDao.findById(id).get();
-        valueDelete.setActive(false);
-        OffsetDateTime offsetDTD = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.of("+03:00"));
-        valueDelete.setDeleted(offsetDTD);
-        logger.info("Film Deleted!"+id);
-        this.processDao.save(valueDelete);
+    public boolean deleteById(Long id) {
+        try {
+            Film valueDelete = this.processDao.findById(id).get();
+            valueDelete.setActive(false);
+            OffsetDateTime offsetDTD = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.of("+03:00"));
+            valueDelete.setDeleted(offsetDTD);
+            logger.info("Film Deleted!" + id);
+            this.processDao.save(valueDelete);
+            return true;
+        } catch (Exception e) {
+            System.out.println("ERROR: " + e.toString());
+            return false;
+        }
     }
 
     @Override
-    public void settingActive(Long id) {
-        Film value = this.processDao.findById(id).get();
-        value.setActive(true);
-        logger.info("Film Actived!"+id);
-        this.processDao.save(value);
+    public boolean settingActive(Long id) {
+        try {
+            Film value = this.processDao.findById(id).get();
+            value.setActive(true);
+            logger.info("Film Actived!" + id);
+            this.processDao.save(value);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     @Override
-    public void settingPassive(Long id) {
-        Film value = this.processDao.findById(id).get();
-        value.setActive(false);
-        logger.info("Film Passived!"+id);
-        this.processDao.save(value);
+    public boolean settingPassive(Long id) {
+      try {
+          Film value = this.processDao.findById(id).get();
+          value.setActive(false);
+          logger.info("Film Passived!" + id);
+          this.processDao.save(value);
+          return true;
+      }
+      catch (Exception e){
+          return false;
+      }
     }
 }

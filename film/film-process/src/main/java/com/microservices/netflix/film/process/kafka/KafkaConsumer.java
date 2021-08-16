@@ -53,7 +53,7 @@ public class KafkaConsumer {
                 this.filmProcessService.add(film);
                 break;
             case UPDATE:
-                this.filmProcessService.update(film.getId(), film);
+                this.filmProcessService.update(film);
                 break;
             case DELETE:
                 this.filmProcessService.deleteById(id);

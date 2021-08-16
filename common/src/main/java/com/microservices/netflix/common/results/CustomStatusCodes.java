@@ -6,7 +6,8 @@ public enum CustomStatusCodes {
     OBJECT_NOT_FOUND(80003),
     OBJECT_ALREADY_EXIST(80004),
     OBJECT_HAS_SAME_VALUE(80005),
-    DATA_NOT_LISTED(80006);
+    DATA_NOT_LISTED(80006),
+    DATA_NOT_FOUND(80007);
 
     public final int value;
 

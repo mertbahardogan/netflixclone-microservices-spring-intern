@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 public interface FilmProcessService {
     Film add(Film film);
 
-    Film update(Long id,Film film);
+    Film update(Film film);
 
-    void deleteById(Long id);
+    boolean deleteById(Long id);
 
-    void settingActive(Long id);
+    boolean settingActive(Long id);
 
-    void settingPassive(Long id);
+    boolean settingPassive(Long id);
 }

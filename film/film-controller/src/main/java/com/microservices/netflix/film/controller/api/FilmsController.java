@@ -16,6 +16,7 @@ import java.util.Optional;
 //Erişim seçenekleri:
 //localhost:54279/film-controller/api/findAll
 //localhost:8088/film-controller/api/findAll
+//Swagger:http://localhost:8088/film-controller/swagger-ui.html#/
 @RequestMapping("api/")
 @CrossOrigin
 public class FilmsController {

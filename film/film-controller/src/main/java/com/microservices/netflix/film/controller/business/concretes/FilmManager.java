@@ -14,7 +14,6 @@ import com.microservices.netflix.common.strings.SuccessMessages;
 import com.microservices.netflix.film.controller.business.abstracts.FilmService;
 import com.microservices.netflix.film.controller.business.helpers.FilmCheckHelper;
 import com.microservices.netflix.film.controller.dataAccess.FilmDao;
-import io.swagger.models.Xml;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
-import springfox.documentation.spring.web.json.Json;
 
 import java.util.List;
 import java.util.Optional;
@@ -53,7 +51,11 @@ public class FilmManager implements FilmService {
     @Override
     public DataResult<List<Film>> findAll() {
         try {
-            return new SuccessDataResult<>(this.filmDao.findAll(), SuccessMessages.allDataListed, HttpStatus.OK.value());
+            if (this.filmDao.findAll().get(0) == null) {
+                return new ErrorDataResult<>(ErrorMessages.dataNotFound, CustomStatusCodes.DATA_NOT_FOUND.getValue());
+            } else {
+                return new SuccessDataResult<>(this.filmDao.findAll(), SuccessMessages.allDataListed, HttpStatus.OK.value());
+            }
         } catch (Exception e) {
             return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
         }
@@ -62,8 +64,14 @@ public class FilmManager implements FilmService {
     @Override
     public DataResult<Optional<Film>> findById(Long id) {
         try {
-            return new SuccessDataResult<>(this.filmDao.findById(id), SuccessMessages.dataListed, HttpStatus.OK.value());
+            if (this.filmDao.findById(id) == null) {
+                return new ErrorDataResult<>(ErrorMessages.dataNotFound, CustomStatusCodes.DATA_NOT_FOUND.getValue());
+            } else {
+                System.out.println(this.filmDao.findById(id).toString());
+                return new SuccessDataResult<>(this.filmDao.findById(id), SuccessMessages.dataListed, HttpStatus.OK.value());
+            }
         } catch (Exception e) {
+            System.out.println(this.filmDao.findById(id).toString());
             return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
         }
     }
@@ -102,9 +110,12 @@ public class FilmManager implements FilmService {
         try {
             var checkFields = !FilmCheckHelper.isFillFields(film);
             var getFilm = this.filmDao.findByName(film.getName());
-            var checkFilm = getFilm.get(0).getId() == film.getId();
-            var checkIsEmpty = getFilm.size() <= 1;
-
+            var checkFilm = false;
+            if (getFilm.size() != 0) {
+                System.out.println("GELEN ID:" + id + "BULUNAN ID" + getFilm.get(0).getId());
+                checkFilm = !(getFilm.get(0).getId() == id); //film.getId()
+                System.out.println(checkFilm);
+            }
             if (checkFields || checkFilm) {
                 String errorMessage = "";
 
@@ -116,10 +127,6 @@ public class FilmManager implements FilmService {
                     errorMessage = ErrorMessages.objectAlreadyExist;
                     statusCode = CustomStatusCodes.OBJECT_ALREADY_EXIST;
                 }
-//                if(isEmptyFilm){
-//                    errorMessage=ErrorMessages.objectNotFoundByName;
-//                    statusCode = CustomStatusCodes.OBJECT_NOT_FOUND;
-//                }
                 return new ErrorResult(errorMessage, statusCode.getValue());
             }
 
@@ -198,16 +205,16 @@ public class FilmManager implements FilmService {
 
     @Override
     public DataResult<List<Film>> findActiveFilmsFromUserService() {
-        try{
-            SuccessDataResult<List<Film>> listDataResult = this.userControllerClient.findAllByIsActive();
+        try {
+            if (this.userControllerClient.findAllByIsActive() == null) {
+                return new ErrorDataResult<>(ErrorMessages.dataNotFound, CustomStatusCodes.DATA_NOT_FOUND.getValue());
+            } else {
+                SuccessDataResult<List<Film>> listDataResult = this.userControllerClient.findAllByIsActive();
+                System.out.println(listDataResult.getData().isEmpty()); //ArrayList
 
-            System.out.println(listDataResult.getData().isEmpty()); //ArrayList
-//            if (listDataResult.getCustomStatusCode() == 200) {
                 return new SuccessDataResult<>(listDataResult.getData(), SuccessMessages.allDataListed, HttpStatus.OK.value());
-//            } else {
-//                return new ErrorDataResult<>("Data User'dan getirilirken ELSE'e düştü.", CustomStatusCodes.DATA_NOT_LISTED.getValue());
-//            }
-        }catch (Exception e){
+            }
+        } catch (Exception e) {
             return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
         }
     }
