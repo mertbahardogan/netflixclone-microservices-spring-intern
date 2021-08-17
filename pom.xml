@@ -48,6 +48,9 @@
         <spring-boot-starter-web.version>2.5.2</spring-boot-starter-web.version>
         <spring-boot-starter-data-jpa.version>2.5.2</spring-boot-starter-data-jpa.version>
 
+        <spring-cloud.version>3.0.2</spring-cloud.version>
+        <spring-cloud-dependencies.version>2020.0.3</spring-cloud-dependencies.version>
+
         <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
         <springfox-swagger-ui.version>2.9.2</springfox-swagger-ui.version>
 
@@ -57,15 +60,15 @@
         <lombok.version>1.18.20</lombok.version>
         <jackson-databind.version>2.12.4</jackson-databind.version>
 
-        <spring-cloud.version>3.0.2</spring-cloud.version>
-        <spring-cloud-dependencies.version>2020.0.3</spring-cloud-dependencies.version>
-
         <logstash.version>6.5</logstash.version>
 
         <eureka-server.version>3.0.3</eureka-server.version>
         <feign.version>1.4.7.RELEASE</feign.version>
 
         <zipkin.version>2.2.8.RELEASE</zipkin.version>
+
+        <micrometer-registry-prometheus.version>1.5.2</micrometer-registry-prometheus.version>
+
     </properties>
 
     <dependencyManagement>
@@ -194,6 +197,11 @@
                 <version>${spring-cloud.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>io.micrometer</groupId>
+                <artifactId>micrometer-registry-prometheus</artifactId>
+                <version>${micrometer-registry-prometheus.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
