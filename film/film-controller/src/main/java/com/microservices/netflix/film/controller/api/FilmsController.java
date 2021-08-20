@@ -7,16 +7,19 @@ import com.microservices.netflix.common.results.Result;
 import com.microservices.netflix.film.controller.business.abstracts.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.Optional;
 
-@RestController
 //Erişim seçenekleri:
 //localhost:54279/film-controller/api/findAll
 //localhost:8088/film-controller/api/findAll
 //Swagger:http://localhost:8088/film-controller/swagger-ui.html#/
+
+@RestController
 @RequestMapping("api/")
 @CrossOrigin
 public class FilmsController {
@@ -31,10 +34,10 @@ public class FilmsController {
     @Autowired
     Environment environment;
 
-
+    @RolesAllowed("admin")
     @GetMapping("findAll")
     public DataResult<List<Film>> findAll() {
-        System.out.println("Let's see SERVER PORT(load balancer): "+ environment.getProperty("local.server.port"));
+        System.out.println("Let's see SERVER PORT(load balancer): " + environment.getProperty("local.server.port"));
         return this.filmService.findAll();
     }
 
@@ -44,12 +47,12 @@ public class FilmsController {
     }
 
     @PostMapping("add")
-    public Result add(@RequestBody Film film)  {
+    public Result add(@RequestBody Film film) {
         return this.filmService.add(film);
     }
 
     @PutMapping("update")
-    public Result update(@RequestParam Long id, @RequestBody Film film)  {
+    public Result update(@RequestParam Long id, @RequestBody Film film) {
         return this.filmService.update(id, film);
     }
 
@@ -59,14 +62,15 @@ public class FilmsController {
     }
 
     @PatchMapping("setActive")
-    public Result setActive(@RequestParam Long id)  {
+    public Result setActive(@RequestParam Long id) {
         return this.filmService.setActive(id);
     }
 
     @PatchMapping("setPassive")
-    public Result setPassive(@RequestParam Long id)  {
+    public Result setPassive(@RequestParam Long id) {
         return this.filmService.setPassive(id);
     }
+
 
     @GetMapping("findActiveFilmsFromUserService")
     public DataResult<List<Film>> findActiveFilmsFromUserService() {

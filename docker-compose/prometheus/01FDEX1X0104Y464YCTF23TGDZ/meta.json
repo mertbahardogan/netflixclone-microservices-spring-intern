@@ -1,0 +1,17 @@
+{
+	"ulid": "01FDEX1X0104Y464YCTF23TGDZ",
+	"minTime": 1629352800000,
+	"maxTime": 1629360000000,
+	"stats": {
+		"numSamples": 71392,
+		"numSeries": 789,
+		"numChunks": 789
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01FDEX1X0104Y464YCTF23TGDZ"
+		]
+	},
+	"version": 1
+}
