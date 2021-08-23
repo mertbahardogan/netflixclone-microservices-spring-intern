@@ -1,0 +1,17 @@
+{
+	"ulid": "01FDSAP67EZGWMWZ563GM9N1S4",
+	"minTime": 1629705600000,
+	"maxTime": 1629712800000,
+	"stats": {
+		"numSamples": 36144,
+		"numSeries": 628,
+		"numChunks": 628
+	},
+	"compaction": {
+		"level": 1,
+		"sources": [
+			"01FDSAP67EZGWMWZ563GM9N1S4"
+		]
+	},
+	"version": 1
+}

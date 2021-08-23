@@ -15,3 +15,5 @@ services:
       - "DB_USER=keycloak"
       - "DB_SCHEMA=keycloak"
       - "DB_PASSWORD=keycloak"
+#    networks:
+#      - ${GLOBAL_NETWORK:-keycloak}

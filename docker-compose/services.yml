@@ -1,0 +1,59 @@
+version: '3.7'
+services:
+#  keycloak-authorization-server:
+#    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:-latest}
+#    hostname: keycloak-server
+#    ports:
+#      - "9091:9091"
+#    environment:
+#      - "KEYCLOAK_USER=admin"
+#      - "KEYCLOAK_PASSWORD=admin"
+#      - "JAVA_OPTS=-Djboss.http.port=9091"
+#      - "DB_VENDOR=POSTGRES"
+#      - "DB_ADDR=host.docker.internal"
+#      - "DB_DATABASE=keycloak"
+#      - "DB_USER=keycloak"
+#      - "DB_SCHEMA=keycloak"
+#      - "DB_PASSWORD=keycloak"
+#    networks:
+#      - ${GLOBAL_NETWORK:-services}
+  film-controller:
+    image: ${GROUP_ID}/film.controller:${SERVICE_VERSION:-latest}
+    ports:
+      - "5005:5005"
+    volumes:
+      - "./docker-logs:/workspace/film-controller/logs"
+    environment:
+      - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xms128m -Xmx256m"
+      - "SPRING_APPLICATION_NAME=film-controller"
+      - "SPRING_PROFILES_ACTIVE=film_controller"
+      - "SPRING_CLOUD_CONFIG_NAME=film-controller,config-client"
+      - "SPRING_CLOUD_CONFIG_URI=http://host.docker.internal:8888"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/netflix"
+      - "SPRING_ZIPKIN_BASE-URL=http://host.docker.internal:9411/"
+      - "SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS=http://host.docker.internal:19092"
+      - "EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://host.docker.internal:8761/eureka/"
+      - "KEYCLOAK_AUTH-SERVER-URL=http://host.docker.internal:9091/auth/"
+
+#    networks: localhost
+#      - ${GLOBAL_NETWORK:-services}
+
+  film-process:
+    image: ${GROUP_ID}/film.process:${SERVICE_VERSION:-latest}
+    ports:
+      - "5006:5006"
+    volumes:
+      - "./docker-logs:/workspace/film-process/logs"
+    environment:
+      - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006 -Xms128m -Xmx256m"
+      - "SPRING_APPLICATION_NAME=film-process"
+      - "SPRING_PROFILES_ACTIVE=film_process"
+      - "SPRING_CLOUD_CONFIG_NAME=film-process,config-client"
+      - "SPRING_CLOUD_CONFIG_URI=http://host.docker.internal:8888"
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/netflix"
+      - "SPRING_ZIPKIN_BASE-URL=http://host.docker.internal:9411/"
+      - "SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS=http://host.docker.internal:19092"
+      - "EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://host.docker.internal:8761/eureka/"
+
+#    networks:
+#      - ${GLOBAL_NETWORK:-services}
