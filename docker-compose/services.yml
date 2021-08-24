@@ -1,28 +1,54 @@
 version: '3.7'
 services:
-#  keycloak-authorization-server:
-#    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:-latest}
-#    hostname: keycloak-server
-#    ports:
-#      - "9091:9091"
-#    environment:
-#      - "KEYCLOAK_USER=admin"
-#      - "KEYCLOAK_PASSWORD=admin"
-#      - "JAVA_OPTS=-Djboss.http.port=9091"
-#      - "DB_VENDOR=POSTGRES"
-#      - "DB_ADDR=host.docker.internal"
-#      - "DB_DATABASE=keycloak"
-#      - "DB_USER=keycloak"
-#      - "DB_SCHEMA=keycloak"
-#      - "DB_PASSWORD=keycloak"
-#    networks:
-#      - ${GLOBAL_NETWORK:-services}
+  keycloak-authorization-server:
+    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:-latest}
+    hostname: keycloak-server
+    ports:
+      - "9091:9091"
+    environment:
+      - "KEYCLOAK_USER=admin"
+      - "KEYCLOAK_PASSWORD=admin"
+      - "JAVA_OPTS=-Djboss.http.port=9091"
+      - "DB_VENDOR=POSTGRES"
+      - "DB_ADDR=host.docker.internal"
+      - "DB_DATABASE=keycloak"
+      - "DB_USER=keycloak"
+      - "DB_SCHEMA=keycloak"
+      - "DB_PASSWORD=keycloak"
+
+  gateway-server:
+    image: ${GROUP_ID}/gateway.server:${SERVICE_VERSION:-latest}
+    ports:
+      - "5101:5101"
+      - "8088:8088"
+    environment:
+      - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5101 -Xms128m -Xmx256m"
+      - "SPRING_APPLICATION_NAME=gateway-server"
+      - "SERVER_PORT=8088"
+      - "EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://eureka-server:8761/eureka/"
+
+  eureka-server:
+    image: ${GROUP_ID}/eureka.server:${SERVICE_VERSION:-latest}
+    ports:
+      - "5102:5102"
+      - "8761:8761"
+    environment:
+      - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5102 -Xms128m -Xmx256m"
+      - "SPRING_APPLICATION_NAME=eureka-server"
+      - "SERVER_PORT=8761"
+      - "SPRING_PROFILES_ACTIVE=eureka_server"
+      - "SPRING_CLOUD_CONFIG_NAME=eureka-server,config-client"
+      - "SPRING_CLOUD_CONFIG_URI=http://host.docker.internal:8888"
+      - "SPRING_ZIPKIN_BASE-URL=http://host.docker.internal:9411/"
+
+
   film-controller:
     image: ${GROUP_ID}/film.controller:${SERVICE_VERSION:-latest}
     ports:
       - "5005:5005"
-    volumes:
-      - "./docker-logs:/workspace/film-controller/logs"
+    depends_on:
+      - keycloak-authorization-server
+      - kafka-broker-1
     environment:
       - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xms128m -Xmx256m"
       - "SPRING_APPLICATION_NAME=film-controller"
@@ -31,19 +57,17 @@ services:
       - "SPRING_CLOUD_CONFIG_URI=http://host.docker.internal:8888"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/netflix"
       - "SPRING_ZIPKIN_BASE-URL=http://host.docker.internal:9411/"
-      - "SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS=http://host.docker.internal:19092"
-      - "EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://host.docker.internal:8761/eureka/"
-      - "KEYCLOAK_AUTH-SERVER-URL=http://host.docker.internal:9091/auth/"
-
-#    networks: localhost
-#      - ${GLOBAL_NETWORK:-services}
+      - "SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS=kafka-broker-1:9092"
+      - "EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://eureka-server:8761/eureka/"
+      - "KEYCLOAK_AUTH-SERVER-URL=http://keycloak-authorization-server:9091/auth/"
+#      - "MS_TOPIC_PROCESS=crudProcessTopic" host.docker.internal
 
   film-process:
     image: ${GROUP_ID}/film.process:${SERVICE_VERSION:-latest}
     ports:
       - "5006:5006"
-    volumes:
-      - "./docker-logs:/workspace/film-process/logs"
+    depends_on:
+      - kafka-broker-1
     environment:
       - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5006 -Xms128m -Xmx256m"
       - "SPRING_APPLICATION_NAME=film-process"
@@ -52,8 +76,10 @@ services:
       - "SPRING_CLOUD_CONFIG_URI=http://host.docker.internal:8888"
       - "SPRING_DATASOURCE_URL=jdbc:postgresql://host.docker.internal:5432/netflix"
       - "SPRING_ZIPKIN_BASE-URL=http://host.docker.internal:9411/"
-      - "SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS=http://host.docker.internal:19092"
-      - "EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://host.docker.internal:8761/eureka/"
+      - "SPRING_KAFKA_CONSUMER_BOOTSTRAP-SERVERS=kafka-broker-1:9092"
+      - "EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://eureka-server:8761/eureka/"
+#      - "MS_TOPIC_PROCESS=crudProcessTopic"
 
-#    networks:
-#      - ${GLOBAL_NETWORK:-services}
+
+
+
