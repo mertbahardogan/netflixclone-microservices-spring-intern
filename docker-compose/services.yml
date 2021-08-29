@@ -1,20 +1,20 @@
 version: '3.7'
 services:
-  keycloak-authorization-server:
-    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:-latest}
-    hostname: keycloak-server
-    ports:
-      - "9091:9091"
-    environment:
-      - "KEYCLOAK_USER=admin"
-      - "KEYCLOAK_PASSWORD=admin"
-      - "JAVA_OPTS=-Djboss.http.port=9091"
-      - "DB_VENDOR=POSTGRES"
-      - "DB_ADDR=host.docker.internal"
-      - "DB_DATABASE=keycloak"
-      - "DB_USER=keycloak"
-      - "DB_SCHEMA=keycloak"
-      - "DB_PASSWORD=keycloak"
+#  keycloak-authorization-server:
+#    image: quay.io/keycloak/keycloak:${KEYCLOAK_VERSION:-latest}
+#    hostname: keycloak-server
+#    ports:
+#      - "9091:9091"
+#    environment:
+#      - "KEYCLOAK_USER=admin"
+#      - "KEYCLOAK_PASSWORD=admin"
+#      - "JAVA_OPTS=-Djboss.http.port=9091"
+#      - "DB_VENDOR=POSTGRES"
+#      - "DB_ADDR=host.docker.internal"
+#      - "DB_DATABASE=keycloak"
+#      - "DB_USER=keycloak"
+#      - "DB_SCHEMA=keycloak"
+#      - "DB_PASSWORD=keycloak"
 
   config-server:
     image: ${GROUP_ID}/config.server:${SERVICE_VERSION:-latest}
@@ -24,8 +24,6 @@ services:
     environment:
       - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5100 -Xms128m -Xmx256m"
       - "SERVER_PORT=8888"
-#      - "SPRING_CLOUD_CONFIG_SERVER_GIT_URI=git://github.com/mertbahardogan/spring-cloud-config-server-repository"
-#      - "SPRING_CLOUD_CONFIG_SERVER_GIT_IGNORE_LOCAL_SSH_SETTINGS=false"
 
   gateway-server:
     image: ${GROUP_ID}/gateway.server:${SERVICE_VERSION:-latest}
@@ -69,7 +67,7 @@ services:
     entrypoint: [ "check-config-server-started.sh" ]
     depends_on:
       - config-server
-      - keycloak-authorization-server
+#      - keycloak-authorization-server
       - kafka-broker-1
     environment:
       - "JAVA_OPTS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -Xms128m -Xmx256m"
@@ -78,7 +76,9 @@ services:
       - "SPRING_ZIPKIN_BASE-URL=http://host.docker.internal:9411/"
       - "SPRING_KAFKA_PRODUCER_BOOTSTRAP-SERVERS=kafka-broker-1:9092"
       - "EUREKA_CLIENT_SERVICE-URL_DEFAULT-ZONE=http://eureka-server:8761/eureka/"
-      - "KEYCLOAK_AUTH-SERVER-URL=http://keycloak-authorization-server:9091/auth/"
+      - "KEYCLOAK_AUTH-SERVER-URL=http://localhost:9091/auth/"
+#      - "KEYCLOAK_AUTH-SERVER-URL=http://host.docker.internal:9091/auth/"
+#      - "KEYCLOAK_AUTH-SERVER-URL=http://keycloak-authorization-server:9091/auth/"
 
   film-process:
     image: ${GROUP_ID}/film.process:${SERVICE_VERSION:-latest}

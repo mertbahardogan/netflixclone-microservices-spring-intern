@@ -9,18 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.Optional;
 
 //Erişim seçenekleri:
 //localhost:54279/film-controller/api/findAll
 //localhost:8088/film-controller/api/findAll
-//Swagger:http://localhost:8088/film-controller/swagger-ui.html#/
+//localhost:8088/film-controller/swagger-ui.html#/
 
 @RestController
 @RequestMapping("api/")
-@CrossOrigin
 public class FilmsController {
 
     private final FilmService filmService;
@@ -33,13 +31,29 @@ public class FilmsController {
     @Autowired
     Environment environment;
 
-    @RolesAllowed("admin")
+    //    @RolesAllowed("admin")
     @GetMapping("findAll")
     public DataResult<List<Film>> findAll() {
         System.out.println("Let's see SERVER PORT(load balancer): " + environment.getProperty("local.server.port"));
         return this.filmService.findAll();
     }
 
+    @GetMapping("findAllByIsActive")
+    public DataResult<List<Film>> findAllByIsActive() {
+        return this.filmService.findAllByIsActive();
+    }
+
+    @GetMapping("findAllByIsNotActive")
+    public DataResult<List<Film>> findAllByIsNotActive() {
+        return this.filmService.findAllByIsNotActive();
+    }
+
+    @GetMapping("findAllByDeletedIsNotNull")
+    public DataResult<List<Film>> findAllByDeletedIsNotNull() {
+        return this.filmService.findAllByDeletedIsNotNull();
+    }
+
+    //    @RolesAllowed("admin")
     @GetMapping("findById")
     public DataResult<Optional<Film>> findById(@RequestParam Long id) {
         return this.filmService.findById(id);
@@ -60,16 +74,15 @@ public class FilmsController {
         return this.filmService.delete(id);
     }
 
-    @PatchMapping("setActive")
+    @PutMapping("setActive")
     public Result setActive(@RequestParam Long id) {
         return this.filmService.setActive(id);
     }
 
-    @PatchMapping("setPassive")
+    @PutMapping("setPassive")
     public Result setPassive(@RequestParam Long id) {
         return this.filmService.setPassive(id);
     }
-
 
     @GetMapping("findActiveFilmsFromUserService")
     public DataResult<List<Film>> findActiveFilmsFromUserService() {

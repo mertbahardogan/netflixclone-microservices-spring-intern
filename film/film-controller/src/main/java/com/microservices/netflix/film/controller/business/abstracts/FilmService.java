@@ -7,12 +7,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 
+import javax.xml.crypto.Data;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public interface FilmService {
     DataResult<List<Film>> findAll();
+
+    DataResult<List<Film>> findAllByIsActive();
+
+    DataResult<List<Film>> findAllByIsNotActive();
+
+    DataResult<List<Film>> findAllByDeletedIsNotNull();
 
     DataResult<Optional<Film>> findById(Long id);
 

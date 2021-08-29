@@ -23,7 +23,7 @@ public class UserProcess {
     @Column(name = "user_id")
     private int userId;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()  //fetch = FetchType.EAGER
     @JoinColumn(name = "film_id")
     private Film film;
 }

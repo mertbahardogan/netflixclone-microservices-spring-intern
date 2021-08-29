@@ -62,6 +62,45 @@ public class FilmManager implements FilmService {
     }
 
     @Override
+    public DataResult<List<Film>> findAllByIsActive() {
+        try {
+            if (this.filmDao.findAllByIsActive().get(0) == null) {
+                return new ErrorDataResult<>(ErrorMessages.dataNotFound, CustomStatusCodes.DATA_NOT_FOUND.getValue());
+            } else {
+                return new SuccessDataResult<>(this.filmDao.findAllByIsActive(), SuccessMessages.allDataListed, HttpStatus.OK.value());
+            }
+        } catch (Exception e) {
+            return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
+        }
+    }
+
+    @Override
+    public DataResult<List<Film>> findAllByIsNotActive() {
+        try {
+            if (this.filmDao.findAllByIsNotActive().get(0) == null) {
+                return new ErrorDataResult<>(ErrorMessages.dataNotFound, CustomStatusCodes.DATA_NOT_FOUND.getValue());
+            } else {
+                return new SuccessDataResult<>(this.filmDao.findAllByIsNotActive(), SuccessMessages.allDataListed, HttpStatus.OK.value());
+            }
+        } catch (Exception e) {
+            return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
+        }
+    }
+
+    @Override
+    public DataResult<List<Film>> findAllByDeletedIsNotNull() {
+        try {
+            if (this.filmDao.findAllByDeletedIsNotNull().get(0) == null) {
+                return new ErrorDataResult<>(ErrorMessages.dataNotFound, CustomStatusCodes.DATA_NOT_FOUND.getValue());
+            } else {
+                return new SuccessDataResult<>(this.filmDao.findAllByDeletedIsNotNull(), SuccessMessages.allDataListed, HttpStatus.OK.value());
+            }
+        } catch (Exception e) {
+            return new ErrorDataResult<>(e.toString(), CustomStatusCodes.DATA_NOT_LISTED.getValue());
+        }
+    }
+
+    @Override
     public DataResult<Optional<Film>> findById(Long id) {
         try {
             if (this.filmDao.findById(id) == null) {

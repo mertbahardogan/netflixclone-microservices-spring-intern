@@ -52,26 +52,26 @@ public class Film {
     @Column(name = "is_active")
     private boolean isActive;
 
-    @JsonIgnore
+//    @JsonIgnore
     @Column(name = "created")
     private OffsetDateTime created;
 
-    @JsonIgnore
+//    @JsonIgnore
     @Column(name = "created_by")
     private int createdBy;
 
-    @JsonIgnore
+//    @JsonIgnore
     @Column(name = "edited")
     private OffsetDateTime edited;
 
-    @JsonIgnore
+//    @JsonIgnore
     @Column(name = "edited_by")
     private int editedBy;
 
-    @JsonIgnore
+//    @JsonIgnore
     @Column(name = "deleted")
     private OffsetDateTime deleted;
 
-    @OneToMany(mappedBy = "film",fetch = FetchType.EAGER) //ve bağlantısına eklendi.
+    @OneToMany(mappedBy = "film") //ve bağlantısına eklendi. ,fetch = FetchType.EAGER
     private List<UserProcess> userProcesses;
 }
