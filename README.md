@@ -45,7 +45,7 @@ This command Dockerize all microservices automatically.
   
 ### 3-Send the following files to PostgreSQL.
 ##### `BackupNetflix and DataNetflix Files.` 
-After that; You can reach every service.Look at the <a href="#port-list">Port Lists.</a> 
+After that; You can reach every service. Look at the <a href="#port-list">Port Lists.</a> 
 
 
 
@@ -65,7 +65,8 @@ If you want to debug, run the following in order:
 2. eureka-server
 3. gateway-server
 4. zipkin-server
-After that you can run which service you want.
+5. After that you can run which service you want. But don't forget dependencies.
+
 
 
 
