@@ -16,15 +16,6 @@
       </ul>
        </li>
         <li><a href="#built-with">Built With</a></li>
-
-       
-     
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
   </ol>
 </details>
 
@@ -56,7 +47,7 @@ This command Dockerize all microservices automatically.
   
 3-Send the following files to PostgreSQL.
 ##### `BackupNetflix and DataNetflix Files.` 
-After that; You can reach every service. Look at the Port Lists. 
+After that; You can reach every service.Look at the <a href="#port-list">Port Lists.</a> 
 
 
 
@@ -78,7 +69,7 @@ If you want to debug, run the following in order:
 
 
 
-HOW TO REACH SERVICES:
+## Port List
 Film Services: http://localhost:8088/film-controller/api/..
 User Services: http://localhost:8088/controller/api/..
 
