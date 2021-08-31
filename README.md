@@ -13,14 +13,13 @@
       <a href="#getting-started">Getting Started</a>
        </li>
     <li><a href="#port-list">Port List</a></li>
-     <li><a href="#contact">Contact</a></li>
         <li><a href="#built-with">Built With</a></li>
     <li><a href="#contributing">Contributing</a></li>
+        <li><a href="#contact">Contact</a></li>
   </ol>
 </details>
 
 ## Requirements
-
 
 1. Java JDK 11
 2. Docker Desktop
