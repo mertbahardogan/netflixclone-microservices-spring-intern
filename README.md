@@ -5,9 +5,6 @@
   <ol>
     <li>
       <a href="#requirements">Requirements</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
     </li>
       <li>
       <a href="#prerequisites">Prerequisites</a>
@@ -15,7 +12,12 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#prerequisites">Prerequisites</a>
+        
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+        </li>
         <li><a href="#installation">Installation</a></li>
       </ul>
     </li>
@@ -46,11 +48,10 @@ This command Dockerize all microservices automatically.
 2-Run the following commands in docker-compose folder in terminal:
    ```sh
    docker-compose -fkafka_cluster.yml -f elastic_cluster.yml -f monitoring.yml -f keycloak_authorization_server.yml up
-   ```
-    ```sh
+   
    docker run -d -p 9411:9411 openzipkin/zipkin
    ```
-
+  
 3-Send the following files to PostgreSQL.
 ### `BackupNetflix and DataNetflix Files.` 
 After that; You can reach every service. Look at the Port Lists. 
