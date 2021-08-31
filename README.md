@@ -91,13 +91,6 @@ After that you can run which service you want.
 * [Kibana](http://localhost:5601/)
 
 
-Zipkin Server: 
-Prometheus: http://localhost:9090/ 
-Grafana: http://localhost:3000/
-
-Elastic: http://localhost:9200/ 
-Kibana: http://localhost:5601/  
-
 Add Index Pattern in Kibana Discover page:
   ```sh
    spring-boot-elk-logs-YYYY.MM.dd 
