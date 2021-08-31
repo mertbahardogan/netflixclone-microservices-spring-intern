@@ -14,13 +14,11 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a>
         
-      <ul>
+      </ul>
         <li><a href="#built-with">Built With</a></li>
-      </ul>
+
         </li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
+     
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#contributing">Contributing</a></li>
@@ -32,10 +30,12 @@
 
 ## Requirements
 
-Java JDK 11
-Docker Desktop
-IDE (IntelliJ)
-PostgreSQL
+
+1. Java JDK 11
+2. Docker Desktop
+3. IDE (IntelliJ)
+4. PostgreSQL
+
 
 ## Prerequisites
 
@@ -51,9 +51,11 @@ This command Dockerize all microservices automatically.
    
    docker run -d -p 9411:9411 openzipkin/zipkin
    ```
+   
+   
   
 3-Send the following files to PostgreSQL.
-### `BackupNetflix and DataNetflix Files.` 
+##### `BackupNetflix and DataNetflix Files.` 
 After that; You can reach every service. Look at the Port Lists. 
 
 
