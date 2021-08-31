@@ -99,7 +99,7 @@ Add Index Pattern in Kibana Discover page:
 ### Technologies
 1. Java 
 2. Spring Boot
-3. Spring Cloud
+3. Spring Cloud (Eureka & Config Server)
 4. Docker and Docker Compose
 5. Apache Kafka
 6. PostgreSQL
