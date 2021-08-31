@@ -81,28 +81,28 @@ After that you can run which service you want.
 
 * [Keycloak Admin Panel](http://localhost:9091/auth/)
 
-* [Loaders.css](https://connoratherton.com/loaders)
-* [Slick Carousel](https://kenwheeler.github.io/slick)
-* [Smooth Scroll](https://github.com/cferdinandi/smooth-scroll)
-* [Sticky Kit](http://leafo.net/sticky-kit)
-* [JVectorMap](http://jvectormap.com)
-* [Font Awesome](https://fontawesome.com)
+* [Config Server Status](http://localhost:8088/actuator/health)
+* [Eureka Server](http://localhost:8761/eureka/)
+
+* [Zipkin Server](http://localhost:9411/zipkin/)
+* [Prometheus](http://localhost:9090/)
+* [Grafana](http://localhost:3000/)
+* [Elastic](http://localhost:9200/)
+* [Kibana](http://localhost:5601/)
 
 
-
-Keycloak Admin Panel: http://localhost:9091/auth/
-
-Eureka Server: http://localhost:8761/eureka/
-Config Server Status: http://localhost:8088/actuator/health
-
-Zipkin Server: http://localhost:9411/zipkin/
+Zipkin Server: 
 Prometheus: http://localhost:9090/ 
 Grafana: http://localhost:3000/
 
 Elastic: http://localhost:9200/ 
 Kibana: http://localhost:5601/  
-Add index pattern in discover page
-spring-boot-elk-logs-YYYY.MM.dd 
+
+Add Index Pattern in Kibana Discover page:
+  ```sh
+   spring-boot-elk-logs-YYYY.MM.dd 
+   ```
+
 
 ## Built With
 
