@@ -25,6 +25,7 @@
 2. Docker Desktop 3.5.1
 3. IDE (IntelliJ 2021.1.3)
 4. PostgreSQL 13
+5. Apache Maven 3.8.1
 
 
 ## Prerequisites
