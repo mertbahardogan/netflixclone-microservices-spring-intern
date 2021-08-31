@@ -21,10 +21,10 @@
 
 ## Requirements
 
-1. Java JDK 11
-2. Docker Desktop
-3. IDE (IntelliJ)
-4. PostgreSQL
+1. Java JDK 11 
+2. Docker Desktop 3.5.1
+3. IDE (IntelliJ 2021.1.3)
+4. PostgreSQL 13
 
 
 ## Prerequisites
