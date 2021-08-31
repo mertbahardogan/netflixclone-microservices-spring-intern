@@ -27,6 +27,7 @@ public class FilmProcessManager implements FilmProcessService {
         Assert.notNull(film.getName(), "İsim alanı boş olamaz.");
         OffsetDateTime offsetDTA = OffsetDateTime.of(LocalDateTime.now(), ZoneOffset.of("+03:00"));
         film.setCreated(offsetDTA);
+        film.setActive(true);
         final Film filmDB = this.processDao.save(film);
         film.setId(filmDB.getId());
         logger.info("New Film Added!" + film.getId() + "!" + film.getName());

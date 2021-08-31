@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +54,7 @@ public class FilmsController {
         return this.filmService.findAllByDeletedIsNotNull();
     }
 
-    //    @RolesAllowed("admin")
+    @RolesAllowed("admin")
     @GetMapping("findById")
     public DataResult<Optional<Film>> findById(@RequestParam Long id) {
         return this.filmService.findById(id);
