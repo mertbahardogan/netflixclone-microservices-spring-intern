@@ -43,7 +43,6 @@ This command Dockerize all microservices automatically.
    docker run -d -p 9411:9411 openzipkin/zipkin
    ```
    
-   
   
 ### 3-Send the following files to PostgreSQL.
 ##### `BackupNetflix and DataNetflix Files.` 
@@ -94,6 +93,7 @@ spring-boot-elk-logs-YYYY.MM.dd
 
 ## Built With
 
+### Technologies
 1. Java 
 2. Spring Boot
 3. Spring Cloud
@@ -105,8 +105,12 @@ spring-boot-elk-logs-YYYY.MM.dd
 9. Prometheus & Grafana
 10. Zipkin
 
+### Architectures
+1. Microservices Architecture
+2. Layered Architecture
 
 
 
-Would you like to any notify or suggest something to me?
+
+## Would you like to any notify or suggest something to me?
 mbahardogan@hotmail.com
