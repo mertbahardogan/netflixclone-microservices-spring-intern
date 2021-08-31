@@ -101,12 +101,13 @@ Add Index Pattern in Kibana Discover page:
 2. Spring Boot
 3. Spring Cloud
 4. Docker and Docker Compose
-5. PostgreSQL
-6. Swagger
-7. ELK Stack (Elascticsearch-Logstash-Kibana)
-8. Keycloak
-9. Prometheus & Grafana
-10. Zipkin
+5. Apache Kafka
+6. PostgreSQL
+7. Swagger
+8. ELK Stack (Elascticsearch-Logstash-Kibana)
+9. Keycloak
+10. Prometheus & Grafana
+11. Zipkin
 
 ### Architectures
 1. Microservices Architecture
