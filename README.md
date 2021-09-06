@@ -38,7 +38,7 @@ This command Dockerize all microservices automatically.
 
 ### 2-Run the following commands in docker-compose folder in terminal:
    ```sh
-   docker-compose -f kafka_cluster.yml -f elastic_cluster.yml -f monitoring.yml -f keycloak_authorization_server.yml up
+   docker-compose up
    
    docker run -d -p 9411:9411 openzipkin/zipkin
    ```
@@ -79,8 +79,8 @@ If you want to debug, run the following in order:
 
 * [Keycloak Admin Panel](http://localhost:9091/auth/)
 
-* [Config Server Status](http://localhost:8088/actuator/health)
-* [Eureka Server](http://localhost:8761/eureka/)
+* [Config Server Status](http://localhost:8888/actuator/health)
+* [Eureka Server](http://localhost:8761/)
 
 * [Zipkin Server](http://localhost:9411/zipkin/)
 * [Prometheus](http://localhost:9090/)
