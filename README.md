@@ -38,7 +38,7 @@ This command Dockerize all microservices automatically.
 
 ### 2-Run the following commands in docker-compose folder in terminal:
    ```sh
-   docker-compose -fkafka_cluster.yml -f elastic_cluster.yml -f monitoring.yml -f keycloak_authorization_server.yml up
+   docker-compose -f kafka_cluster.yml -f elastic_cluster.yml -f monitoring.yml -f keycloak_authorization_server.yml up
    
    docker run -d -p 9411:9411 openzipkin/zipkin
    ```
