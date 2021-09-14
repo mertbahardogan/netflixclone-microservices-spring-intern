@@ -6,20 +6,13 @@ import com.microservices.netflix.common.results.DataResult;
 import com.microservices.netflix.common.results.Result;
 import com.microservices.netflix.film.controller.business.abstracts.FilmService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.security.RolesAllowed;
 import java.util.List;
 import java.util.Optional;
 
-//Erişim seçenekleri:
-//localhost:54279/film-controller/api/findAll
-//localhost:8088/film-controller/api/findAll
-//localhost:8088/film-controller/swagger-ui.html#/
-
 @RestController
-@RequestMapping("api/")
+@RequestMapping("/api/v1")
 public class FilmsController {
 
     private final FilmService filmService;
@@ -29,63 +22,59 @@ public class FilmsController {
         this.filmService = filmService;
     }
 
-    @Autowired
-    Environment environment;
 
-    //    @RolesAllowed("admin")
-    @GetMapping("findAll")
+    @GetMapping()
     public DataResult<List<Film>> findAll() {
-        System.out.println("Let's see SERVER PORT(load balancer): " + environment.getProperty("local.server.port"));
         return this.filmService.findAll();
     }
 
-    @GetMapping("findAllByIsActive")
+    @GetMapping("/active")
     public DataResult<List<Film>> findAllByIsActive() {
         return this.filmService.findAllByIsActive();
     }
 
-    @GetMapping("findAllByIsNotActive")
+    @GetMapping("/passive")
     public DataResult<List<Film>> findAllByIsNotActive() {
         return this.filmService.findAllByIsNotActive();
     }
 
-    @GetMapping("findAllByDeletedIsNotNull")
+    @GetMapping("/deleted")
     public DataResult<List<Film>> findAllByDeletedIsNotNull() {
         return this.filmService.findAllByDeletedIsNotNull();
     }
 
-    @RolesAllowed("admin")
-    @GetMapping("findById")
-    public DataResult<Optional<Film>> findById(@RequestParam Long id) {
+
+    @GetMapping(value = "/{id}")
+    public DataResult<Optional<Film>> findById(@PathVariable(value = "id") Long id) {
         return this.filmService.findById(id);
     }
 
-    @PostMapping("add")
+    @PostMapping()
     public Result add(@RequestBody Film film) {
         return this.filmService.add(film);
     }
 
-    @PutMapping("update")
-    public Result update(@RequestParam Long id, @RequestBody Film film) {
+    @PutMapping(value = "/{id}")
+    public Result update(@PathVariable(value = "id") Long id, @RequestBody Film film) {
         return this.filmService.update(id, film);
     }
 
-    @DeleteMapping("delete")
-    public Result delete(@RequestParam Long id) {
+    @DeleteMapping(value = "/{id}")
+    public Result delete(@PathVariable(value = "id") Long id) {
         return this.filmService.delete(id);
     }
 
-    @PutMapping("setActive")
-    public Result setActive(@RequestParam Long id) {
+    @PatchMapping("/active/{id}")
+    public Result setActive(@PathVariable(value = "id") Long id) {
         return this.filmService.setActive(id);
     }
 
-    @PutMapping("setPassive")
-    public Result setPassive(@RequestParam Long id) {
+    @PatchMapping("/passive/{id}")
+    public Result setPassive(@PathVariable(value = "id") Long id) {
         return this.filmService.setPassive(id);
     }
 
-    @GetMapping("findActiveFilmsFromUserService")
+    @GetMapping("/feign")
     public DataResult<List<Film>> findActiveFilmsFromUserService() {
         return this.filmService.findActiveFilmsFromUserService();
     }

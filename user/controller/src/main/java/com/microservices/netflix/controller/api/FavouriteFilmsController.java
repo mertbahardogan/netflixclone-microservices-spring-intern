@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/favourite-films/")
+@RequestMapping("/favourite/api/v1")
 public class FavouriteFilmsController{
-
     private final FavouriteFilmService favouriteFilmService;
 
     @Autowired
@@ -20,24 +19,23 @@ public class FavouriteFilmsController{
         this.favouriteFilmService = favouriteFilmService;
     }
 
-
-    @GetMapping("findFavouriteFilms")
+    @GetMapping()
     public DataResult<List<FavouriteFilm>> findFavouriteFilms() {
         return this.favouriteFilmService.findFavouriteFilms();
     }
 
-    @GetMapping("findFavouriteFilmsByIsActiveAndUserId")
-    public  DataResult<List<FavouriteFilm>> findFavouriteFilmsByIsActiveAndUserId(@RequestParam int userId) {
+    @GetMapping("/{userId}")
+    public  DataResult<List<FavouriteFilm>> findFavouriteFilmsByIsActiveAndUserId(@PathVariable(value = "userId") int userId) {
         return this.favouriteFilmService.findFavouriteFilmsByIsActiveAndUserId(userId);
     }
 
-    @PostMapping("addToFav")
+    @PostMapping()
     public Result addToFav(@RequestBody FavouriteFilm favouriteFilm) {
         return this.favouriteFilmService.addToFav(favouriteFilm);
     }
 
-    @DeleteMapping("deleteFromFav")
-    public Result deleteFromFav(@RequestParam Long id) {
+    @DeleteMapping(value = "/{id}")
+    public Result deleteFromFav(@PathVariable(value = "id") Long id) {
         return this.favouriteFilmService.deleteFromFav(id);
     }
 }

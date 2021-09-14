@@ -1,6 +1,5 @@
 package com.microservices.netflix.controller.api;
 
-import com.microservices.netflix.common.entities.RateFilm;
 import com.microservices.netflix.common.entities.WatchContent;
 import com.microservices.netflix.common.results.DataResult;
 import com.microservices.netflix.common.results.Result;
@@ -12,7 +11,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("api/watched-films/")
+@RequestMapping("/watched/api/v1")
 public class WatchedFilmsController {
     private final WatchedFilmService watchedFilmService;
 
@@ -21,23 +20,23 @@ public class WatchedFilmsController {
         this.watchedFilmService = watchedFilmService;
     }
 
-    @PostMapping("add")
+    @PostMapping()
     public Result add(@RequestBody WatchContent watchContent){
         return this.watchedFilmService.add(watchContent);
     }
 
-    @PutMapping("update")
-    public Result update(@RequestParam Long id,@RequestBody  WatchContent watchContent)  {
+    @PutMapping(value = "/{id}")
+    public Result update(@PathVariable(value = "id") Long id,@RequestBody WatchContent watchContent)  {
         return this.watchedFilmService.update(id,watchContent);
     }
 
-    @GetMapping("findByIsActiveAndIsFinishedAndUserId")
-    public DataResult<List<WatchContent>> findByIsActiveAndIsFinishedAndUserId(@RequestParam int userId){
+    @GetMapping("/finished-films/{userId}")
+    public DataResult<List<WatchContent>> findByIsActiveAndIsFinishedAndUserId(@PathVariable(value = "userId") int userId){
         return this.watchedFilmService.findByIsActiveAndIsFinishedAndUserId(userId);
     }
 
-    @GetMapping("findByIsActiveAndIsNotFinishedAndUserId")
-    public DataResult<List<WatchContent>> findByIsActiveAndIsNotFinishedAndUserId(@RequestParam int userId){
+    @GetMapping("/films/{userId}")
+    public DataResult<List<WatchContent>> findByIsActiveAndIsNotFinishedAndUserId(@PathVariable(value = "userId") int userId){
         return this.watchedFilmService.findByIsActiveAndIsNotFinishedAndUserId(userId);
     }
 }

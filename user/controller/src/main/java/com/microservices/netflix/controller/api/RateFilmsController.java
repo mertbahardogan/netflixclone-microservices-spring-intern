@@ -10,33 +10,33 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/rate-films/")
+@RequestMapping("/rate/api/v1/")
 @CrossOrigin
 public class RateFilmsController {
-    private RateFilmService rateFilmService;
+    private final RateFilmService rateFilmService;
 
     @Autowired
     public RateFilmsController(RateFilmService rateFilmService) {
         this.rateFilmService = rateFilmService;
     }
 
-    @PostMapping("add")
+    @PostMapping()
     public Result add(@RequestBody RateFilm rateFilm){
         return this.rateFilmService.add(rateFilm);
     }
 
-    @PutMapping("update")
-    public Result update(@RequestParam Long id,@RequestBody RateFilm rateFilm)  {
+    @PutMapping(value = "/{id}")
+    public Result update(@PathVariable(value = "id") Long id,@RequestBody RateFilm rateFilm)  {
         return this.rateFilmService.update(id,rateFilm);
     }
 
-    @DeleteMapping("delete")
-    public Result add(@RequestParam Long id) {
+    @DeleteMapping(value = "/{id}")
+    public Result delete(@PathVariable(value = "id") Long id) {
         return this.rateFilmService.delete(id);
     }
 
-    @GetMapping("findRatedFilmsByIsActiveAndUserId")
-    public DataResult<List<RateFilm>> findRatedFilmsByIsActiveAndUserId(@RequestParam int userId){
+    @GetMapping(value = "/{userId}")
+    public DataResult<List<RateFilm>> findRatedFilmsByIsActiveAndUserId(@PathVariable(value = "userId") int userId){
         return this.rateFilmService.findRatedFilmsByIsActiveAndUserId(userId);
     }
 }
