@@ -5,7 +5,7 @@ import com.microservices.netflix.common.entities.Film;
 import com.microservices.netflix.common.results.DataResult;
 import com.microservices.netflix.common.results.Result;
 import com.microservices.netflix.film.controller.business.abstracts.FilmService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class FilmsController {
 
     private final FilmService filmService;
 
-    @Autowired
+    @ConstructorBinding
     public FilmsController(FilmService filmService) {
         this.filmService = filmService;
     }

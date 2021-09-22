@@ -4,6 +4,7 @@ import com.microservices.netflix.common.entities.FavouriteFilm;
 import com.microservices.netflix.favourite.process.business.abstracts.FavouriteProcessService;
 import com.microservices.netflix.favourite.process.dataAccess.FavouriteProcessDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,7 +12,7 @@ public class FavouriteProcessManager implements FavouriteProcessService {
 
     private final FavouriteProcessDao  favouriteProcessDao;
 
-    @Autowired
+    @ConstructorBinding
     public FavouriteProcessManager(FavouriteProcessDao favouriteProcessDao) {
         this.favouriteProcessDao = favouriteProcessDao;
     }

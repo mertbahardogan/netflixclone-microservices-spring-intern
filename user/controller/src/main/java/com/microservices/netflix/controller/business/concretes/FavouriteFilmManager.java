@@ -12,8 +12,8 @@ import com.microservices.netflix.controller.business.abstracts.FavouriteFilmServ
 import com.microservices.netflix.controller.dataAccess.FavouriteFilmDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -31,7 +31,7 @@ public class FavouriteFilmManager implements FavouriteFilmService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final FavouriteFilmDao favouriteFilmDao;
 
-    @Autowired
+    @ConstructorBinding
     public FavouriteFilmManager(KafkaTemplate<String, String> kafkaTemplate, FavouriteFilmDao favouriteFilmDao) {
         this.kafkaTemplate = kafkaTemplate;
         this.favouriteFilmDao = favouriteFilmDao;

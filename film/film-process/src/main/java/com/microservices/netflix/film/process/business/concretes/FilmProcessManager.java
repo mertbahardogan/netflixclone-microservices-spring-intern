@@ -5,7 +5,7 @@ import com.microservices.netflix.film.process.business.abstracts.FilmProcessServ
 import com.microservices.netflix.film.process.dataAccess.FilmProcessDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
@@ -17,7 +17,7 @@ public class FilmProcessManager implements FilmProcessService {
     private final FilmProcessDao processDao;
     Logger logger = LoggerFactory.getLogger(FilmProcessManager.class);
 
-    @Autowired
+    @ConstructorBinding
     public FilmProcessManager(FilmProcessDao processDao) {
         this.processDao = processDao;
     }

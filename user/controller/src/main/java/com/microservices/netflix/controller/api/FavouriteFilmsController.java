@@ -5,6 +5,7 @@ import com.microservices.netflix.common.results.DataResult;
 import com.microservices.netflix.common.results.Result;
 import com.microservices.netflix.controller.business.abstracts.FavouriteFilmService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import java.util.List;
 public class FavouriteFilmsController{
     private final FavouriteFilmService favouriteFilmService;
 
-    @Autowired
+    @ConstructorBinding
     public FavouriteFilmsController(FavouriteFilmService favouriteFilmService) {
         this.favouriteFilmService = favouriteFilmService;
     }
