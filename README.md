@@ -34,9 +34,17 @@
    ```sh
    mvn clean install
    ```
-This command Dockerize all microservices automatically.
+This command Dockerize all microservices automatically if you have dockerize code in pom.xml in services or you can use Dockerfile.
 
-### 2-Run the following commands in docker-compose folder in terminal:
+### 2-Run the following commands in Config Server Repository module:
+ ```sh
+   git init
+   git remote add origin https://github.com/mertbahardogan/spring-cloud-config-server-repository
+   git pull https://github.com/mertbahardogan/spring-cloud-config-server-repository main
+   ```
+
+
+### 3-Run the following commands in docker-compose folder in terminal:
    ```sh
    docker-compose up
    
@@ -44,13 +52,13 @@ This command Dockerize all microservices automatically.
    ```
    
   
-### 3-Send the following files to PostgreSQL.
+### 4-Send the following files to PostgreSQL.
 ##### `BackupNetflix and DataNetflix Files.` 
 After that; You can reach every service. Look at the <a href="#port-list">Port Lists.</a> 
 
 
 
-### 4- Choice time:
+### 5- Choice time:
 
 #### Option 1: 
 If you want to run in docker, just do the following items:
@@ -129,4 +137,4 @@ Contributions are what make the open source community such an amazing place to l
 
 ## Contact
 ### Would you like to any notify or suggest something to me?
-mbahardogan@hotmail.com
+mbahardogan4@gmail.com
