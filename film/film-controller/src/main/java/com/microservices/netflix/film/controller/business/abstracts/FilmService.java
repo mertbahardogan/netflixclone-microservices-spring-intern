@@ -25,13 +25,13 @@ public interface FilmService {
 
     Result add(Film film);
 
-    Result update(Long id,Film film) ;
+    Result update(Long id, Film film);
 
-    Result delete(Long id) ;
+    Result delete(Long id);
 
-    Result setActive(Long id) ;
+    Result setActive(Long id);
 
-    Result setPassive(Long id) ;
+    Result setPassive(Long id);
 
     DataResult<List<Film>> findActiveFilmsFromUserService();
 }

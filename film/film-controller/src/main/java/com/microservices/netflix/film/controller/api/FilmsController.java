@@ -43,7 +43,6 @@ public class FilmsController {
         return this.filmService.findAllByDeletedIsNotNull();
     }
 
-
     @GetMapping(value = "/{id}")
     public DataResult<Optional<Film>> findById(@PathVariable(value = "id") Long id) {
         return this.filmService.findById(id);

@@ -52,23 +52,18 @@ public class Film {
     @Column(name = "is_active")
     private boolean isActive;
 
-//    @JsonIgnore
     @Column(name = "created")
     private OffsetDateTime created;
 
-//    @JsonIgnore
     @Column(name = "created_by")
     private int createdBy;
 
-//    @JsonIgnore
     @Column(name = "edited")
     private OffsetDateTime edited;
 
-//    @JsonIgnore
     @Column(name = "edited_by")
     private int editedBy;
 
-//    @JsonIgnore
     @Column(name = "deleted")
     private OffsetDateTime deleted;
 

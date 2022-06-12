@@ -1,6 +1,7 @@
 package com.microservices.netflix.common.strings;
 
 public class SuccessMessages {
+    //TODO: Big Naming Convension Needed
     public static final String allDataListed="Veriler başarıyla listelendi.";
 
     public static final String dataListed="Veri başarıyla listelendi.";

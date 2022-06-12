@@ -43,20 +43,20 @@ class FilmManagerTest {
         film.setActive(true);
 
         when(filmDao.findAll()).thenReturn(Collections.singletonList(film));
-        DataResult<List<Film>> filmList=filmManager.findAll();
-        assertEquals(filmList.getData().size(),1);
+        DataResult<List<Film>> filmList = filmManager.findAll();
+        assertEquals(filmList.getData().size(), 1);
 
-        assertEquals(filmList.getCustomStatusCode(),200);
-        assertEquals(filmList.getData().get(0).getId(),film.getId());
+        assertEquals(filmList.getCustomStatusCode(), 200);
+        assertEquals(filmList.getData().get(0).getId(), film.getId());
     }
 
     @Test
-    void testFindAllException(){
+    void testFindAllException() {
         when(filmDao.findAll()).thenReturn(Collections.singletonList(null));
-        DataResult<List<Film>> filmList=filmManager.findAll();
+        DataResult<List<Film>> filmList = filmManager.findAll();
 
-        assertEquals(filmList.getData(),null);
-        assertEquals(filmList.getCustomStatusCode(),80007);
+        assertEquals(filmList.getData(), null);
+        assertEquals(filmList.getCustomStatusCode(), 80007);
     }
 
     @Test
@@ -72,22 +72,22 @@ class FilmManagerTest {
         film.setActive(true);
 
         when(filmDao.findById(1L)).thenReturn(Optional.of(film));
-        Film filmList=filmManager.findById(1L).getData().get();
-        assertEquals(filmList.getId(),film.getId());
+        Film filmList = filmManager.findById(1L).getData().get();
+        assertEquals(filmList.getId(), film.getId());
     }
 
     @Test
-    void testFindByIdException(){
+    void testFindByIdException() {
         when(filmDao.findById(1L)).thenReturn(null);
-        DataResult<Optional<Film>> filmList=filmManager.findById(1L);
-        assertEquals(filmList.getData(),null);
-        assertEquals(filmList.getCustomStatusCode(),80007);
+        DataResult<Optional<Film>> filmList = filmManager.findById(1L);
+        assertEquals(filmList.getData(), null);
+        assertEquals(filmList.getCustomStatusCode(), 80007);
     }
 
     @Test
-    void testFindActiveFilmsFromUserService(){
+    void testFindActiveFilmsFromUserService() {
         when(userControllerClient.findAllByIsActive()).thenReturn(null);
-        DataResult<List<Film>> filmList=filmManager.findActiveFilmsFromUserService();
-        assertEquals(filmList.getCustomStatusCode(),80007);
+        DataResult<List<Film>> filmList = filmManager.findActiveFilmsFromUserService();
+        assertEquals(filmList.getCustomStatusCode(), 80007);
     }
 }

@@ -42,7 +42,6 @@
     <properties>
         <java.version>11</java.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
 
         <spring-boot.version>2.5.2</spring-boot.version>
         <spring-boot-starter-web.version>2.5.2</spring-boot-starter-web.version>
