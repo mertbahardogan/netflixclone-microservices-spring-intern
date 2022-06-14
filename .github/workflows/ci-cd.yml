@@ -51,7 +51,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
-        run: docker build -t my-image-name:$(date +%s) .
+        run: docker build -f user/controller/Dockerfile -t controller
 #
 #  #Docker publish
 #  docker-publish:
