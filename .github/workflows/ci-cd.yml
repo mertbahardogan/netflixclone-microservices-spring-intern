@@ -7,8 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  #Unit Test
-  tests:
+
+  test:
     name: Unit tests
     #Run on Ubuntu using the latest version
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
       #Run Tests
       - name: Run Tests
         run: mvn -B test
-#  #Maven
+
 #  maven:
 #    runs-on: ubuntu-latest
 #    steps:
@@ -45,14 +45,14 @@ jobs:
 #          cache: maven
 #      - name: Build with Maven
 #        run: mvn -B package --file pom.xml
-#  #Dockerize
+
   dockerize:
-    name: Docker ize
+    name: Dockerize Spring Project
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
-        run: docker build . --file user/controller/Dockerfile --tag my-image-name:$(date +%s)
+        run: docker build --tag my-image-name:$(date +%s) --file user/controller/Dockerfile .
 
 #
 #  #Docker publish
