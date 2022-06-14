@@ -46,12 +46,12 @@ jobs:
 #      - name: Build with Maven
 #        run: mvn -B package --file pom.xml
 #  #Dockerize
-#  dockerize:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Build the Docker image
-#        run: docker build . --file user/controller/Dockerfile --tag my-image-name:$(date +%s)
+  dockerize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build . --file user/controller/Dockerfile --tag my-image-name:$(date +%s)
 #
 #  #Docker publish
 #  docker-publish:
