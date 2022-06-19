@@ -5,7 +5,7 @@ import com.microservices.netflix.common.results.*;
 import com.microservices.netflix.common.strings.SuccessMessages;
 import com.microservices.netflix.controller.business.abstracts.UserService;
 import com.microservices.netflix.controller.dataAccess.UserDao;
-import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ import java.util.Optional;
 public class UserManager implements UserService {
     private final UserDao userDao;
 
-    @ConstructorBinding
+    @Autowired
     public UserManager(UserDao userDao) {
         this.userDao = userDao;
     }

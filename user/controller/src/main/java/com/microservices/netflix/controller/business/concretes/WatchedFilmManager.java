@@ -12,8 +12,8 @@ import com.microservices.netflix.controller.business.abstracts.WatchedFilmServic
 import com.microservices.netflix.controller.dataAccess.WatchedFilmDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConstructorBinding;
 import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -31,7 +31,7 @@ public class WatchedFilmManager implements WatchedFilmService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final WatchedFilmDao watchedFilmDao;
 
-    @ConstructorBinding
+    @Autowired
     public WatchedFilmManager(KafkaTemplate<String, String> kafkaTemplate, WatchedFilmDao watchedFilmDao) {
         this.kafkaTemplate = kafkaTemplate;
         this.watchedFilmDao = watchedFilmDao;

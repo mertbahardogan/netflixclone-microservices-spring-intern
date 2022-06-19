@@ -4,7 +4,7 @@ import com.microservices.netflix.common.entities.RateFilm;
 import com.microservices.netflix.rate.process.business.abstracts.RateProcessService;
 import com.microservices.netflix.rate.process.dataAccess.RateProcessDao;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +12,7 @@ public class RateProcessManager implements RateProcessService {
 
     private final RateProcessDao rateProcessDao;
 
-    @ConstructorBinding
+    @Autowired
     public RateProcessManager(RateProcessDao rateProcessDao) {
         this.rateProcessDao = rateProcessDao;
     }

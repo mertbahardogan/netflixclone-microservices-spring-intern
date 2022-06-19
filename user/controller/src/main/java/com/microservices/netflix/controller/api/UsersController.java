@@ -3,7 +3,7 @@ package com.microservices.netflix.controller.api;
 import com.microservices.netflix.common.entities.Film;
 import com.microservices.netflix.common.results.DataResult;
 import com.microservices.netflix.controller.business.abstracts.UserService;
-import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Optional;
 public class UsersController {
     private final UserService userService;
 
-    @ConstructorBinding
+    @Autowired
     public UsersController(UserService userService) {
         this.userService = userService;
     }

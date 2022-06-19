@@ -3,14 +3,14 @@ package com.microservices.netflix.watched.content.process.business.concretes;
 import com.microservices.netflix.common.entities.WatchContent;
 import com.microservices.netflix.watched.content.process.business.abstracts.WatchedFilmProcessService;
 import com.microservices.netflix.watched.content.process.dataAccess.WatchedFilmProcessDao;
-import org.springframework.boot.context.properties.ConstructorBinding;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class WatchedFilmProcessManager implements WatchedFilmProcessService {
     private final WatchedFilmProcessDao watchedFilmProcessDao;
 
-    @ConstructorBinding
+    @Autowired
     public WatchedFilmProcessManager(WatchedFilmProcessDao watchedFilmProcessDao) {
         this.watchedFilmProcessDao = watchedFilmProcessDao;
     }
