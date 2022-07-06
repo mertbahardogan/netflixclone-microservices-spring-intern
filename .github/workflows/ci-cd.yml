@@ -7,6 +7,12 @@ on:
     branches: [ main ]
 
 jobs:
+  - name: Build and push
+    id: docker_build
+    uses: docker/build-push-action@v2
+    with:
+      context: .
+      push: false
 #
 #  test:
 #    name: Unit tests
@@ -46,13 +52,13 @@ jobs:
 #      - name: Build with Maven
 #        run: mvn -B package --file pom.xml
 
-  dockerize:
-    name: Dockerize Spring Project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build the Docker image
-        run: docker build --tag my-image-name:$(date +%s) --file user/controller/Dockerfile .
+#  dockerize:
+#    name: Dockerize Spring Project
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Build the Docker image
+#        run: docker build --tag my-image-name:$(date +%s) --file user/controller/Dockerfile .
 
 #
 #  #Docker publish
