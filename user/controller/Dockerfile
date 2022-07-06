@@ -1,5 +1,5 @@
 FROM openjdk:11
 EXPOSE 8000
-WORKDIR "user/controller/target/"
-COPY "controller.jar" controller.jar
-CMD [ "java", "-jar", "controller.jar" ]
+#WORKDIR "user/controller/target/"
+ADD target/controller-0.0.1-SNAPSHOT.jar controller-0.0.1-SNAPSHOT.jar
+ENTRYPOINT [ "java", "-jar", "/controller-0.0.1-SNAPSHOT.jar" ]
