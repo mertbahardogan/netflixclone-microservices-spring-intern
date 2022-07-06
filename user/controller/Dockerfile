@@ -1,5 +1,4 @@
 FROM openjdk:11
 EXPOSE 8000
-WORKDIR "user/controller/target/"
-ADD controller-0.0.1-SNAPSHOT.jar controller-0.0.1-SNAPSHOT.jar
-ENTRYPOINT [ "java", "-jar", "/controller-0.0.1-SNAPSHOT.jar" ]
+ADD user/controller/target/microservices-netflix-0.0.1-SNAPSHOT.jar microservices-netflix-0.0.1-SNAPSHOT.jar
+ENTRYPOINT [ "java", "-jar", "/microservices-netflix-0.0.1-SNAPSHOT.jar" ]
