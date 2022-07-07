@@ -7,6 +7,32 @@ on:
     branches: [ main ]
 
 jobs:
+
+  test:
+    name: Unit tests
+    #Run on Ubuntu using the latest version
+    runs-on: ubuntu-latest
+    #Job's steps
+    steps:
+      #Check-out your repository under $GITHUB_WORKSPACE, so your workflow can access it
+      - uses: actions/checkout@v1
+      #Set up JDK 11
+      - name: Set up JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+      #Set up Maven cache
+      - name: Cache Maven packages
+        #This action allows caching dependencies and build outputs to improve workflow execution time.
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      #Run Tests
+      - name: Run Tests
+        run: mvn -B test
+
   build-and-push:
     runs-on: ubuntu-latest
     steps:
@@ -29,29 +55,3 @@ jobs:
           dockerfile: user/controller/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-
-
-#  test:
-#    name: Unit tests
-#    #Run on Ubuntu using the latest version
-#    runs-on: ubuntu-latest
-#    #Job's steps
-#    steps:
-#      #Check-out your repository under $GITHUB_WORKSPACE, so your workflow can access it
-#      - uses: actions/checkout@v1
-#      #Set up JDK 11
-#      - name: Set up JDK
-#        uses: actions/setup-java@v1
-#        with:
-#          java-version: '11'
-#      #Set up Maven cache
-#      - name: Cache Maven packages
-#        #This action allows caching dependencies and build outputs to improve workflow execution time.
-#        uses: actions/cache@v1
-#        with:
-#          path: ~/.m2
-#          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-#          restore-keys: ${{ runner.os }}-m2
-#      #Run Tests
-#      - name: Run Tests
-#        run: mvn -B test
