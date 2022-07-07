@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  maven-build:
+  build-and-push:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,23 +19,16 @@ jobs:
           cache: maven
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-  dockerize:
-    name: Dockerize Spring Project
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build the Docker image
-        run: docker build -t 19812381238/intern-netflix-clone --file user/controller/Dockerfile .
 
-#      - name: Build & Push Docker Image
-#        uses: mr-smithers-excellent/docker-build-push@v5
-#        with:
-#          image: 19812381238/intern-netflix-clone
-#          tags: latest
-#          registry: docker.io
-#          dockerfile: user/controller/Dockerfile
-#          username: ${{ secrets.DOCKER_USERNAME }}
-#          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build & Push Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: 19812381238/intern-netflix-clone
+          tags: latest
+          registry: docker.io
+          dockerfile: user/controller/Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
 
 #  test:
@@ -62,18 +55,3 @@ jobs:
 #      #Run Tests
 #      - name: Run Tests
 #        run: mvn -B test
-#
-#  maven:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#      - name: Set up JDK 11
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '11'
-#          distribution: 'adopt'
-#          cache: maven
-#      - name: Build with Maven
-#        run: mvn -B package --file pom.xml
-
-
