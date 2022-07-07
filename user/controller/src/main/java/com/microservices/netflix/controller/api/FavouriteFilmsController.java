@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/favourite/api/v1")
 public class FavouriteFilmsController{
+
     private final FavouriteFilmService favouriteFilmService;
 
     @Autowired
