@@ -3,13 +3,10 @@ name: CI/CD Pipeline
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
 
 jobs:
-
   test:
-    name: Unit tests
+    name: Unit Test
     #Run on Ubuntu using the latest version
     runs-on: ubuntu-latest
     #Job's steps
@@ -34,6 +31,7 @@ jobs:
         run: mvn -B test
 
   build-and-push:
+    name: Build and Push
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -49,7 +47,7 @@ jobs:
       - name: Build & Push Docker Image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
-          image: 19812381238/intern-netflix-clone
+          image: intern-netflix-clone
           tags: latest
           registry: docker.io
           dockerfile: user/controller/Dockerfile
