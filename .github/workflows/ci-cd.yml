@@ -26,7 +26,7 @@ jobs:
           image: 19812381238/intern-netflix-clone
           tags: latest
           registry: docker.io
-          dockerfile: Dockerfile
+          dockerfile: user/controller/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
