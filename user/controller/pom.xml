@@ -82,7 +82,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
         </plugins>
-        <finalName>intern-netflix-clone</finalName>
+<!--        <finalName>intern-netflix-clone</finalName>-->
     </build>
 
 
