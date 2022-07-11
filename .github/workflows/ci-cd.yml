@@ -47,7 +47,7 @@ jobs:
       - name: Build & Push Docker Image
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
-          image: intern-netflix-clone
+          image: 19812381238/intern-netflix-clone
           tags: latest
           registry: docker.io
           dockerfile: user/controller/Dockerfile

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/watched/api/v1")
+@RequestMapping("/user/watched")
 public class WatchedFilmsController {
     private final WatchedFilmService watchedFilmService;
 

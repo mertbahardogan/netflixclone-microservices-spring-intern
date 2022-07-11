@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/favourite/api/v1")
+@RequestMapping("/user/favourite")
 public class FavouriteFilmsController{
 
     private final FavouriteFilmService favouriteFilmService;
